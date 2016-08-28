@@ -9,15 +9,19 @@ public:
 	void PEchecker();
 	void read(LPVOID buffer, DWORD length);
 	void run();
+	DWORD Rva2Offset(DWORD rva, PIMAGE_SECTION_HEADER psh, PIMAGE_NT_HEADERS pnt);
 	void setPoint(HANDLE hFile, LONG lDistanceToMove);
 	
 
 private:
-	HANDLE fileHandle;
+	HANDLE fileHandle, hMod;
+	DWORD fileSize;
+	PVOID virtualpointer;
 	LPCTSTR fileName;
-	IMAGE_DOS_HEADER fileDosHeader;
-	IMAGE_NT_HEADERS fileNtHeaders;
-	PIMAGE_IMPORT_DESCRIPTOR fileImport;
+	PIMAGE_DOS_HEADER pfileDosHeader;
+	PIMAGE_NT_HEADERS pfileNtHeaders;
+	PIMAGE_IMPORT_DESCRIPTOR pfileImport;
+	PIMAGE_SECTION_HEADER pfileSection;
 	LPDWORD fileNum;
 
 };
