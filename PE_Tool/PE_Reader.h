@@ -22,6 +22,7 @@ private:
 	PIMAGE_NT_HEADERS pfileNtHeaders;
 	PIMAGE_IMPORT_DESCRIPTOR pfileImport;
 	PIMAGE_SECTION_HEADER pfileSection;
+	PIMAGE_THUNK_DATA pfileThunk;
 	LPDWORD fileNum;
 
 };

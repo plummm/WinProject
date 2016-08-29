@@ -57,8 +57,10 @@ void PE_Reader::read(LPVOID buffer, DWORD length)
 
 void PE_Reader::run()
 {
-	LPCSTR szLibName;
+	LPSTR szLibName;
+	PVOID wszLibName = NULL;
 	DWORD rva;
+	int wideSize = 0;
 
 	read(virtualpointer,fileSize);
 	CloseHandle(fileHandle);
@@ -69,7 +71,16 @@ void PE_Reader::run()
 		pfileSection,
 		pfileNtHeaders);
 	pfileImport = PIMAGE_IMPORT_DESCRIPTOR((DWORD_PTR)virtualpointer+rva);
-	_tprintf(L"Library name is %s", (PCHAR)((DWORD_PTR)virtualpointer + Rva2Offset(pfileImport->Name, pfileSection, pfileNtHeaders)));
+	szLibName = (PCHAR)((DWORD_PTR)virtualpointer + Rva2Offset(pfileImport->Name, pfileSection, pfileNtHeaders));
+	
+	wideSize = MultiByteToWideChar(CP_UTF8, 0, szLibName, -1, NULL, 0);
+	wszLibName = VirtualAlloc(NULL, wideSize * sizeof(wchar_t), MEM_COMMIT, PAGE_READWRITE);
+	MultiByteToWideChar(CP_UTF8, 0, szLibName, -1, (LPWSTR)wszLibName, wideSize * sizeof(wchar_t));
+
+	pfileThunk = PIMAGE_THUNK_DATA((DWORD_PTR)virtualpointer + pfileImport->FirstThunk);
+	//MessageBoxA(NULL, szLibName, "ss", MB_OK);
+
+	_tprintf(L"Library name is %s", wszLibName);
 
 	//pfileSection = PIMAGE_SECTION_HEADER()
 	/*
@@ -108,6 +119,7 @@ DWORD PE_Reader::Rva2Offset(DWORD rva, PIMAGE_SECTION_HEADER psh, PIMAGE_NT_HEAD
 		}
 		pSeh++;
 	}
+	//_tprintf(L"This tot is %d\n", pSeh->PointerToRawData - pSeh->VirtualAddress);
 	return (rva - pSeh->VirtualAddress + pSeh->PointerToRawData);
 }
 
