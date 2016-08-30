@@ -77,7 +77,7 @@ void PE_Reader::run()
 	wszLibName = VirtualAlloc(NULL, wideSize * sizeof(wchar_t), MEM_COMMIT, PAGE_READWRITE);
 	MultiByteToWideChar(CP_UTF8, 0, szLibName, -1, (LPWSTR)wszLibName, wideSize * sizeof(wchar_t));
 
-	pfileThunk = PIMAGE_THUNK_DATA((DWORD_PTR)virtualpointer + pfileImport->FirstThunk);
+	pfileThunk = PIMAGE_THUNK_DATA((DWORD_PTR)virtualpointer + Rva2Offset(pfileImport->FirstThunk, pfileSection, pfileNtHeaders));
 	//MessageBoxA(NULL, szLibName, "ss", MB_OK);
 
 	_tprintf(L"Library name is %s", wszLibName);
