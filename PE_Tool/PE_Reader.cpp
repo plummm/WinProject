@@ -19,12 +19,6 @@ fileName(L"F:\\WinProject\\DLLinject\\NOTEPAD.EXE")
 	fileSize = GetFileSize(fileHandle, NULL);
 	virtualpointer = VirtualAlloc(NULL, fileSize, MEM_COMMIT, PAGE_READWRITE);
 	
-	
-	/*
-	pfileNtHeaders = (PIMAGE_NT_HEADERS)malloc(sizeof(PIMAGE_NT_HEADERS));
-	pfileDosHeader = (PIMAGE_DOS_HEADER)malloc(sizeof(IMAGE_DOS_HEADER));
-	pfileImport = (PIMAGE_IMPORT_DESCRIPTOR)malloc(sizeof(PIMAGE_IMPORT_DESCRIPTOR));
-	*/
 }
 
 
@@ -78,26 +72,7 @@ void PE_Reader::run()
 	MultiByteToWideChar(CP_UTF8, 0, szLibName, -1, (LPWSTR)wszLibName, wideSize * sizeof(wchar_t));
 
 	pfileThunk = PIMAGE_THUNK_DATA((DWORD_PTR)virtualpointer + Rva2Offset(pfileImport->FirstThunk, pfileSection, pfileNtHeaders));
-	//MessageBoxA(NULL, szLibName, "ss", MB_OK);
 
-	_tprintf(L"Library name is %s", wszLibName);
-
-	//pfileSection = PIMAGE_SECTION_HEADER()
-	/*
-	read((void *)pfileDosHeader, sizeof(IMAGE_DOS_HEADER));
-	setPoint(fileHandle, pfileDosHeader->e_lfanew);
-	read((void *)pfileNtHeaders, sizeof(pfileNtHeaders));
-	pfileSection = (PIMAGE_SECTION_HEADER)malloc(sizeof(PIMAGE_SECTION_HEADER)*pfileNtHeaders->FileHeader.NumberOfSections);
-	pfileSection = IMAGE_FIRST_SECTION(pfileNtHeaders);
-	rva=Rva2Offset(pfileNtHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress,
-			   pfileSection,
-			   pfileNtHeaders);
-	setPoint(fileHandle, rva);
-	//read((void *)pfileImport, sizeof(pfileImport));
-	pfileImport = (PIMAGE_IMPORT_DESCRIPTOR)((DWORD_PTR)&pfileDosHeader + rva);
-	_tprintf(L"Name is %x %x %x\n", pfileDosHeader, pfileDosHeader->e_lfanew, pfileNtHeaders);
-	//for (; )
-	*/
 	PEchecker();
 }
 
@@ -119,7 +94,6 @@ DWORD PE_Reader::Rva2Offset(DWORD rva, PIMAGE_SECTION_HEADER psh, PIMAGE_NT_HEAD
 		}
 		pSeh++;
 	}
-	//_tprintf(L"This tot is %d\n", pSeh->PointerToRawData - pSeh->VirtualAddress);
 	return (rva - pSeh->VirtualAddress + pSeh->PointerToRawData);
 }
 
