@@ -1,0 +1,11 @@
+﻿  stdafx.cpp
+  UniversalDllInjectTemplate.cpp
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(150): warning C4101: “pSize”: 未引用的局部变量
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(152): warning C4101: “exe_path”: 未引用的局部变量
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(148): warning C4101: “fileHandle”: 未引用的局部变量
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(153): warning C4101: “addr”: 未引用的局部变量
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(199): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“HANDLE”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(204): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“LPVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(212): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“LPTHREAD_START_ROUTINE”
+  UniversalDllInjectTemplate.vcxproj -> F:\GitHub\WinProject\DLLInject\UniversalDllInjectTemplate\Debug\UniversalDllInjectTemplate.exe
+  UniversalDllInjectTemplate.vcxproj -> F:\GitHub\WinProject\DLLInject\UniversalDllInjectTemplate\Debug\UniversalDllInjectTemplate.pdb (Full PDB)

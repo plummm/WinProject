@@ -1,0 +1,24 @@
+﻿  UniversalDllInjectTemplate.cpp
+UniversalDllInjectTemplate.cpp(61): warning C4311: “类型转换”: 从“HMODULE”到“ULONG”的指针截断
+UniversalDllInjectTemplate.cpp(61): warning C4302: “类型转换”: 从“HMODULE”到“ULONG”截断
+UniversalDllInjectTemplate.cpp(69): warning C4312: “类型转换”: 从“ULONG”转换到更大的“PVOID”
+UniversalDllInjectTemplate.cpp(70): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+UniversalDllInjectTemplate.cpp(79): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+UniversalDllInjectTemplate.cpp(83): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+UniversalDllInjectTemplate.cpp(97): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+UniversalDllInjectTemplate.cpp(99): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+UniversalDllInjectTemplate.cpp(100): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+UniversalDllInjectTemplate.cpp(101): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+UniversalDllInjectTemplate.cpp(183): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“HANDLE”
+UniversalDllInjectTemplate.cpp(183): warning C4313: “wprintf”: 格式字符串中的“%x”与“HANDLE”类型的参数 1 冲突
+UniversalDllInjectTemplate.cpp(188): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“LPVOID”
+UniversalDllInjectTemplate.cpp(188): warning C4313: “wprintf”: 格式字符串中的“%x”与“LPVOID”类型的参数 1 冲突
+UniversalDllInjectTemplate.cpp(196): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“LPTHREAD_START_ROUTINE”
+UniversalDllInjectTemplate.cpp(196): warning C4313: “wprintf”: 格式字符串中的“%x”与“LPTHREAD_START_ROUTINE”类型的参数 1 冲突
+  正在生成代码
+  1 of 15 functions ( 6.7%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  UniversalDllInjectTemplate.vcxproj -> F:\GitHub\WinProject\DLLInject\UniversalDllInjectTemplate\x64\Release\UniversalDllInjectTemplate.exe
+  UniversalDllInjectTemplate.vcxproj -> F:\GitHub\WinProject\DLLInject\UniversalDllInjectTemplate\x64\Release\UniversalDllInjectTemplate.pdb (Full PDB)

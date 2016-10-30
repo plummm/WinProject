@@ -1,0 +1,20 @@
+﻿  stdafx.cpp
+  UniversalDllInjectTemplate.cpp
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(61): warning C4311: “类型转换”: 从“HMODULE”到“ULONG”的指针截断
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(61): warning C4302: “类型转换”: 从“HMODULE”到“ULONG”截断
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(69): warning C4312: “类型转换”: 从“ULONG”转换到更大的“PVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(70): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(79): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(83): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(97): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(99): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(100): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(101): warning C4312: “类型转换”: 从“unsigned long”转换到更大的“PVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(183): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“HANDLE”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(183): warning C4313: “wprintf”: 格式字符串中的“%x”与“HANDLE”类型的参数 1 冲突
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(188): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“LPVOID”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(188): warning C4313: “wprintf”: 格式字符串中的“%x”与“LPVOID”类型的参数 1 冲突
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(196): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“LPTHREAD_START_ROUTINE”
+f:\github\winproject\dllinject\universaldllinjecttemplate\universaldllinjecttemplate\universaldllinjecttemplate.cpp(196): warning C4313: “wprintf”: 格式字符串中的“%x”与“LPTHREAD_START_ROUTINE”类型的参数 1 冲突
+  UniversalDllInjectTemplate.vcxproj -> F:\GitHub\WinProject\DLLInject\UniversalDllInjectTemplate\x64\Debug\UniversalDllInjectTemplate.exe
+  UniversalDllInjectTemplate.vcxproj -> F:\GitHub\WinProject\DLLInject\UniversalDllInjectTemplate\x64\Debug\UniversalDllInjectTemplate.pdb (Full PDB)
