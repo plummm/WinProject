@@ -1,0 +1,5 @@
+# GameSafeDemo.cpp #
+腾讯的一道试题
+要求监测并拦截截屏动作
+
+我Hook了CreateCompatibleDC来拦截截屏，CreatProcess来保证创建新进程也能注入DLL，正打算注入winlogin来监测explorer保证重启explorer也能再次被注入
