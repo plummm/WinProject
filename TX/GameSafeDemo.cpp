@@ -15,10 +15,15 @@
 
 #define DEFGDI32 "gdi32.dll"
 #define DEFKERNEL32 "kernel32.dll"
+#define DEFUSER32 "User32.dll"
+#define DEFDWM "dwmcore.dll"
 
 #define DEFCCD "CreateCompatibleDC"
 #define DEFCPW "CreateProcessW"
 #define DEFCPA "CreateProcessA"
+#define DEFCCB "CreateCompatibleBitmap"
+#define DEFSB "StretchBlt"
+#define DEFMCCC "MilConnection_CreateChannel"
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
@@ -39,8 +44,35 @@ typedef BOOL(WINAPI *PFCREATEPROCESS)(
 	LPPROCESS_INFORMATION lpProcessInformation
 	);
 
-typedef HDC(WINAPI *PFCREATECOMPATIBLEDC)(
+typedef HDC (WINAPI *PFCREATECOMPATIBLEDC)(
 	HDC hdc
+	);
+
+
+typedef BOOL(WINAPI *PFSTRETCHBLT)(
+	HDC   hdcDest,
+	int   nXOriginDest,
+	int   nYOriginDest,
+	int   nWidthDest,
+	int   nHeightDest,
+	HDC   hdcSrc,
+	int   nXOriginSrc,
+	int   nYOriginSrc,
+	int   nWidthSrc,
+	int   nHeightSrc,
+	DWORD dwRop
+	);
+
+typedef HBITMAP(WINAPI *PFCREATECOMPATIBLEBITMAP)(
+	HDC hdc,
+	int nWidth,
+	int nHeight
+	);
+
+typedef int (WINAPI *PFMILCONNECTION_CREATECHANNEL)(
+	intptr_t pTransport,
+	intptr_t hChannel,
+	intptr_t channelHandle
 	);
 
 struct CopyScreenData
@@ -49,11 +81,18 @@ struct CopyScreenData
 	TCHAR *FileName = NULL;
 };
 
+#pragma data_seg(".share")
 CopyScreenData CopyScreenIntercapt;
+DWORD DemoPID = 0;
+#pragma data_seg()
+#pragma comment(linker, "/section:.share,RWS")
+
 FARPROC g_function = NULL;
 DWORD g_tmpFlag = 0;
 TCHAR dll_path[MAX_PATH];
-BYTE g_pOrgBytes[5] = { 0, };
+BYTE g_pOrgBytes1[5] = { 0, };
+BYTE g_pOrgBytes2[5] = { 0, };
+DWORD monitorPid = 0;
 
 
 
@@ -100,6 +139,9 @@ BOOL InjectDll(DWORD dwPID, LPCTSTR szDllPath)
 	TCHAR szOutputText[1024] = { 0 };
 	int pBit = 0;
 
+	if (DemoPID == dwPID)
+		goto done;
+
 	if (!(hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwPID)))
 	{
 		wsprintfW(szOutputText, L"OpenProcess(%d) failed!!! [%d]\n", dwPID, GetLastError());
@@ -115,12 +157,13 @@ BOOL InjectDll(DWORD dwPID, LPCTSTR szDllPath)
 
 	pThreadProc = (LPTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")), "LoadLibraryW");
 	//_tprintf(L"pThreadProc:%x\n", pThreadProc);
+	OutputDebugStringW(L"Start CreateRemoteThread");
 
 	hThread = CreateRemoteThread(hProcess, NULL, 0, pThreadProc, pRemoteBuf, 0, NULL);
 	WaitForSingleObject(hThread, INFINITE);
 	CloseHandle(hThread);
 	CloseHandle(hProcess);
-
+done:
 	return TRUE;
 }
 
@@ -187,6 +230,49 @@ BOOL UnHook(LPCSTR szDllName, LPCSTR szFuncName, PBYTE pOrgByte)
 	return TRUE;
 }
 
+//监视explorer
+void MonitorExplr()
+{
+	HANDLE hProcess, hProcessSnap;
+	PROCESSENTRY32 pe32;
+	DWORD dwPriorityClass;
+	TCHAR szOutputText[1024] = { 0 };
+	long long flag = 0;
+	
+
+	hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	if (hProcessSnap == INVALID_HANDLE_VALUE)
+	{
+		OutputDebugStringW(L"[Monitor] CreateToolhelp32Snapshot failed!\n");
+	}
+	pe32.dwSize = sizeof(PROCESSENTRY32);
+
+	if (!Process32First(hProcessSnap, &pe32))
+	{
+		OutputDebugStringW(L"[Monitor] Process32First failed!\n");
+	}
+	do
+	{
+		if (wcscmp(pe32.szExeFile, L"explorer.exe") == 0)
+		{
+			
+			if (monitorPid == 0)
+			{
+				monitorPid = pe32.th32ProcessID;
+				OutputDebugStringW(L"Initiallize monitor!");
+			}
+			else if (monitorPid != pe32.th32ProcessID)
+			{
+				InjectDll(pe32.th32ProcessID, dll_path);
+				monitorPid = pe32.th32ProcessID;
+				OutputDebugStringW(L"explorer changed!");
+			}
+		}
+
+	} while (Process32Next(hProcessSnap, &pe32));
+}
+
+//遗弃的HOOK
 HDC MyCCD(
 	HDC hdc
 )
@@ -194,18 +280,78 @@ HDC MyCCD(
 	FARPROC pFunc;
 	HDC status;
 
-	//MessageBox(NULL, "Hook Successfully!", "Succeed", MB_OK);
-	UnHook(DEFGDI32, DEFCCD, g_pOrgBytes);
+	
+	UnHook(DEFGDI32, DEFCCD, g_pOrgBytes1);
 
 	pFunc = GetProcAddress(GetModuleHandleA(DEFGDI32), DEFCCD);
 	OutputDebugStringW(L"Hook CD Succeed!");
 	g_tmpFlag = 1;
-	status = ((PFCREATECOMPATIBLEDC)pFunc)((HDC)1);
+	CopyScreenIntercapt.g_dwCopyScreenFlag = 1;
+	status = ((PFCREATECOMPATIBLEDC)pFunc)(hdc);
 
-	Hook(DEFGDI32, DEFCCD, (PROC)MyCCD, g_pOrgBytes);
+	Hook(DEFGDI32, DEFCCD, (PROC)MyCCD, g_pOrgBytes1);
 	return status;
 }
 
+HBITMAP MyCCB(HDC hdc, int nWidth, int nHeight)
+{
+	FARPROC pFunc;
+	HBITMAP status;
+
+
+	UnHook(DEFGDI32, DEFCCB, g_pOrgBytes1);
+
+	pFunc = GetProcAddress(GetModuleHandleA(DEFGDI32), DEFCCB);
+	OutputDebugStringW(L"Hook CCB Succeed!");
+	g_tmpFlag = 1;
+	CopyScreenIntercapt.g_dwCopyScreenFlag = 1;
+	status = ((PFCREATECOMPATIBLEBITMAP)pFunc)(hdc,0,0);
+
+	Hook(DEFGDI32, DEFCCB, (PROC)MyCCB, g_pOrgBytes1);
+	return status;
+}
+
+
+BOOL MySB(
+	HDC   hdcDest,
+	int   nXOriginDest,
+	int   nYOriginDest,
+	int   nWidthDest,
+	int   nHeightDest,
+	HDC   hdcSrc,
+	int   nXOriginSrc,
+	int   nYOriginSrc,
+	int   nWidthSrc,
+	int   nHeightSrc,
+	DWORD dwRop
+)
+{
+	FARPROC pFunc;
+	BOOL status;
+
+	
+	UnHook(DEFGDI32, DEFSB, g_pOrgBytes2);
+
+	pFunc = GetProcAddress(GetModuleHandleA(DEFGDI32), DEFSB);
+	OutputDebugStringW(L"Hook SB Succeed!");
+	g_tmpFlag = 1;
+	CopyScreenIntercapt.g_dwCopyScreenFlag = 1;
+	status = ((PFSTRETCHBLT)pFunc)(
+		hdcDest, 
+		nXOriginDest, 
+		nYOriginDest, 
+		nWidthDest, 
+		nHeightDest, 
+		hdcSrc, 
+		nXOriginSrc, 
+		nYOriginSrc, 
+		nWidthSrc,
+		nHeightSrc,
+		BLACKNESS);
+
+	Hook(DEFGDI32, DEFSB, (PROC)MySB, g_pOrgBytes2);
+	return status;
+}
 
 
 BOOL MyCPW(
@@ -225,7 +371,7 @@ BOOL MyCPW(
 //	LPPROCESS_INFORMATION lpProcessInformation;
 	TCHAR szOutputText[1024] = { 0 };
 
-	UnHook(DEFKERNEL32, DEFCPW, g_pOrgBytes);
+	UnHook(DEFKERNEL32, DEFCPW, g_pOrgBytes1);
 
 	pFunc = GetProcAddress(GetModuleHandleA(DEFKERNEL32), DEFCPW);
 	OutputDebugStringW(L"Hook CPW Succeed!");
@@ -256,7 +402,7 @@ BOOL MyCPW(
 	}
 	
 
-	Hook(DEFKERNEL32, DEFCPW, (PROC)MyCPW, g_pOrgBytes);
+	Hook(DEFKERNEL32, DEFCPW, (PROC)MyCPW, g_pOrgBytes1);
 	return status;
 }
 
@@ -274,10 +420,9 @@ BOOL MyCPA(
 {
 	FARPROC pFunc;
 	BOOL status;
-	//	LPPROCESS_INFORMATION lpProcessInformation;
 	TCHAR szOutputText[1024] = { 0 };
 
-	UnHook(DEFKERNEL32, DEFCPA, g_pOrgBytes);
+	UnHook(DEFKERNEL32, DEFCPA, g_pOrgBytes2);
 
 	pFunc = GetProcAddress(GetModuleHandleA(DEFKERNEL32), DEFCPA);
 	OutputDebugStringW(L"Hook CPA Succeed!");
@@ -307,7 +452,28 @@ BOOL MyCPA(
 		OutputDebugStringW(szOutputText);
 	}
 
-	Hook(DEFKERNEL32, DEFCPA, (PROC)MyCPA, g_pOrgBytes);
+	Hook(DEFKERNEL32, DEFCPA, (PROC)MyCPA, g_pOrgBytes2);
+	return status;
+}
+
+int MyMCCC(
+	intptr_t pTransport,
+	intptr_t hChannel,
+	intptr_t channelHandle)
+{
+	FARPROC pFunc;
+	int status;
+	TCHAR szOutputText[1024] = { 0 };
+
+	UnHook(DEFDWM, DEFMCCC, g_pOrgBytes1);
+
+	pFunc = GetProcAddress(GetModuleHandleA(DEFDWM), DEFMCCC);
+	OutputDebugStringW(L"Hook MCCC succeed!");
+	status = ((PFMILCONNECTION_CREATECHANNEL)pFunc)(pTransport, hChannel, channelHandle);
+
+	MonitorExplr();
+
+	Hook(DEFDWM, DEFMCCC, (PROC)MyMCCC, g_pOrgBytes1);
 	return status;
 }
 
@@ -317,7 +483,6 @@ void EnumProcess()
 	PROCESSENTRY32 pe32;
 	DWORD dwPriorityClass;
 	DWORD explrPid = 0;
-	PVOID targetProcess;
 	TCHAR szOutputText[1024] = { 0 };
 	long long flag = 0;
 
@@ -358,14 +523,15 @@ void EnumProcess()
 		OutputDebugStringW(L"CreateToolhelp32Snapshot failed!\n");
 	}
 	pe32.dwSize = sizeof(PROCESSENTRY32);
-
 	if (!Process32First(hProcessSnap, &pe32))
 	{
 		OutputDebugStringW(L"Process32First failed!\n");
 	}
+
 	do
 	{
-		if (wcscmp(pe32.szExeFile, L"explorer.exe") != 0 && pe32.th32ProcessID!=GetCurrentThreadId() && pe32.th32ParentProcessID == explrPid)
+		//OutputDebugStringW(pe32.szExeFile);
+		if (wcscmp(pe32.szExeFile, L"dwm.exe") == 0 || (wcscmp(pe32.szExeFile, L"explorer.exe") != 0 && pe32.th32ProcessID!=GetCurrentProcessId() && pe32.th32ParentProcessID == explrPid))
 		{
 			//_tprintf(L"This pid is %d and the name is %s , My parent is %d\n", pe32.th32ProcessID, pe32.szExeFile, pe32.th32ParentProcessID);
 			if (InjectDll(pe32.th32ProcessID, dll_path))
@@ -390,6 +556,9 @@ void EnumProcess()
 	return;
 }
 
+
+
+
 //截屏检测初始化逻辑在该函数内实现
 extern "C" GAMESAFEDEMO_API DWORD InitCheck()
 {
@@ -399,7 +568,7 @@ extern "C" GAMESAFEDEMO_API DWORD InitCheck()
 	OutputDebugStringW(L"InitCheck");
 
 	SetDebugPrivileges();
-
+	DemoPID = GetCurrentProcessId();
 	//GetCurrentDirectoryW(MAX_PATH, dll_path);
 	GetModuleFileNameW((HINSTANCE)&__ImageBase,dll_path,MAX_PATH);
 	//wcscat_s(dll_path, MAX_PATH, L"\\GameSafeDemo.dll");
@@ -464,13 +633,22 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		OutputDebugStringW(szOutputText);
 		if (wcscmp(p + 1, L"explorer.exe") == 0)
 		{
-			Hook(DEFKERNEL32, DEFCPW, (PROC)MyCPW, g_pOrgBytes);
-			Hook(DEFKERNEL32, DEFCPA, (PROC)MyCPA, g_pOrgBytes);
+			Hook(DEFKERNEL32, DEFCPW, (PROC)MyCPW, g_pOrgBytes1);
+			Hook(DEFKERNEL32, DEFCPA, (PROC)MyCPA, g_pOrgBytes2);
 			
+		}
+		else if (wcscmp(p + 1, L"dwm.exe") == 0)
+		{
+			//注入不进去？见鬼了？
+			Hook(DEFDWM, DEFMCCC, (PROC)MyMCCC, g_pOrgBytes1);
+			
+
 		}
 		else
 		{
-			Hook(DEFGDI32, DEFCCD, (PROC)MyCCD, g_pOrgBytes);
+			//Hook(DEFGDI32, DEFCCD, (PROC)MyCCD, g_pOrgBytes1);
+			Hook(DEFGDI32, DEFCCB, (PROC)MyCCB, g_pOrgBytes1);
+			Hook(DEFGDI32, DEFSB, (PROC)MySB, g_pOrgBytes2);
 		}
 		break;
 	}
@@ -479,6 +657,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	case DLL_PROCESS_DETACH:
 		//OutputDebugStringW(L"Exit Hook");
 		//UnHook_CCD(DEFDLL, DEFCCD, g_pOrgBytes);
+
 		break;
 	}
 	return TRUE;
