@@ -7,3 +7,12 @@ F:\GitHub\WinProject\sendToPrinter\obj\Debug\Interop.Microsoft.Office.Core.dll
 F:\GitHub\WinProject\sendToPrinter\obj\Debug\sendToPrinter.csproj.ResolveComReference.cache
 F:\GitHub\WinProject\sendToPrinter\obj\Debug\sendToPrinter.exe
 F:\GitHub\WinProject\sendToPrinter\obj\Debug\sendToPrinter.pdb
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\bin\Debug\sendToPrinter.dll.config
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\bin\Debug\sendToPrinter.dll
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\bin\Debug\sendToPrinter.pdb
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Debug\sendToPrinter.csprojResolveAssemblyReference.cache
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Debug\Interop.ACTIVEXLib.dll
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Debug\Interop.Microsoft.Office.Core.dll
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Debug\sendToPrinter.csproj.ResolveComReference.cache
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Debug\sendToPrinter.dll
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Debug\sendToPrinter.pdb

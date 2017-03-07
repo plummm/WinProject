@@ -7,10 +7,8 @@ using Microsoft.Office.Interop.Word;
 
 namespace sendToPrinter
 {
-    class Program
+    class DocPrint
     {
-        
-        
         
         static void Main(string[] args)
         {
@@ -18,7 +16,7 @@ namespace sendToPrinter
             Microsoft.Office.Interop.Word.Document doc;
             object readOnly = false;
             object isVisible = false;
-            string fileName= "C:\\Users\\ETenal\\Documents\\Hello World.docx";
+            string fileName= args[1];
             word.Visible = false;
             word.DisplayAlerts = Microsoft.Office.Interop.Word.WdAlertLevel.wdAlertsNone;
             doc = word.Documents.Open(fileName, ReadOnly: readOnly, Visible: isVisible);
