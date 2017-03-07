@@ -1,0 +1,6 @@
+﻿  access.cpp
+access.cpp(78): warning C4477: “wprintf”: 格式字符串“%ld”需要类型“long”的参数，但可变参数 2 拥有了类型“LONGLONG”
+  access.cpp(78): note: 请考虑在格式字符串中使用“%lld”
+  access.cpp(78): note: 请考虑在格式字符串中使用“%I64d”
+  LINK : 已指定 /LTCG，但不需要生成代码；从链接命令行中移除 /LTCG 以提高链接器性能
+  autoprint.vcxproj -> F:\GitHub\WinProject\autoprint\Release\autoprint.exe

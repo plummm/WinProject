@@ -12,8 +12,12 @@
 #include <Windows.h>
 #include <Shlwapi.h>
 #include <strsafe.h>
+#include <iostream>
+#include <msclr/marshal_cppstd.h>
 
-#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+#using "..\Release\sendToPrinter.dll"
+
+//#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 #pragma comment(lib, "User32.lib")
 #pragma comment(lib, "Shlwapi.lib")
 #pragma comment(lib, "Winspool.lib")

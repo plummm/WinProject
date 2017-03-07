@@ -38,6 +38,7 @@ BOOL access::ListAllFile(TCHAR szDirAdd[MAX_PATH])
 
 	StringCchCopy(szDirBack, MAX_PATH, szDir);
 	StringCchCat(szDir, MAX_PATH, TEXT("\\*"));
+	_tprintf(L"szDir:%s szPrintedDir:%s szDirBack:%s\n",szDir, szPrintedDir, szDirBack);
 
 	hFind = FindFirstFile(szDir, &ffd);
 
@@ -58,15 +59,22 @@ BOOL access::ListAllFile(TCHAR szDirAdd[MAX_PATH])
 		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			_tprintf(TEXT("  %s   <DIR>\n"), ffd.cFileName);
-			if (StrCmpW(ffd.cFileName, L"426") == 0 && length_of_name <= MAX_PATH - 4)
-				access::CopyFileFromNas(szName, szPrintedName);
+			StringCchCat(szDirAdd, MAX_PATH, ffd.cFileName);
+			if (CreateDirectory(szDirAdd, NULL))
+			{
+				dwError = GetLastError();
+				return dwError;
+			}
+			this->ListAllFile(szName);
 		}
 		else
 		{
 			filesize.LowPart = ffd.nFileSizeLow;
 			filesize.HighPart = ffd.nFileSizeHigh;
-			if (StrCmpW(ffd.cFileName, L"426") == 0 && length_of_name <= MAX_PATH - 4)
-				access::CopyFileFromNas(szName, szPrintedName);
+			//if (StrCmpW(ffd.cFileName, L"426") == 0 && length_of_name <= MAX_PATH - 4)
+			this->CopyFileFromNas(szName, szPrintedName);
+			this->Printer.readDoc(szName);
+			this->DeleteFileFromNas(szName);
 			_tprintf(TEXT("  %s   %ld bytes\n"), ffd.cFileName, filesize.QuadPart);
 		}
 	} while (FindNextFile(hFind, &ffd) != 0);

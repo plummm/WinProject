@@ -1,7 +1,11 @@
+
+
 #include "stdafx.h"
 #include "printer.h"
 
 
+using namespace sendToPrinter;
+using namespace std;
 
 printer::printer()
 {
@@ -112,96 +116,37 @@ int printer::print(LPBYTE lpData, DWORD dwCount, DWORD dwWritten)
 	return bStatus;
 }
 
-// RawDataToPrinter - sends binary data directly to a printer
-// 
-// Params:
-//   szPrinterName - NULL terminated string specifying printer name
-//   lpData        - Pointer to raw data bytes
-//   dwCount       - Length of lpData in bytes
-// 
-// Returns: TRUE for success, FALSE for failure.
-// 
-BOOL RawDataToPrinter(LPWSTR szPrinterName, LPBYTE lpData, DWORD dwCount)
-{
-	HANDLE     hPrinter;
-	DOC_INFO_1 DocInfo;
-	DWORD      dwJob;
-	DWORD      dwBytesWritten;
-
-	// Need a handle to the printer.
-	if (!OpenPrinter(szPrinterName, &hPrinter, NULL))
-		return FALSE;
-
-	// Fill in the structure with info about this "document."
-	DocInfo.pDocName = L"My Document";
-	DocInfo.pOutputFile = NULL;
-	DocInfo.pDatatype = L"RAW";
-	// Inform the spooler the document is beginning.
-	if ((dwJob = StartDocPrinter(hPrinter, 1, (LPBYTE)&DocInfo)) == 0)
-	{
-		ClosePrinter(hPrinter);
-		return FALSE;
-	}
-	// Start a page.
-	if (!StartPagePrinter(hPrinter))
-	{
-		EndDocPrinter(hPrinter);
-		ClosePrinter(hPrinter);
-		return FALSE;
-	}
-	// Send the data to the printer.
-	if (!WritePrinter(hPrinter, lpData, dwCount, &dwBytesWritten))
-	{
-		EndPagePrinter(hPrinter);
-		EndDocPrinter(hPrinter);
-		ClosePrinter(hPrinter);
-		return FALSE;
-	}
-	// End the page.
-	if (!EndPagePrinter(hPrinter))
-	{
-		EndDocPrinter(hPrinter);
-		ClosePrinter(hPrinter);
-		return FALSE;
-	}
-	// Inform the spooler that the document is ending.
-	if (!EndDocPrinter(hPrinter))
-	{
-		ClosePrinter(hPrinter);
-		return FALSE;
-	}
-	// Tidy up the printer handle.
-	ClosePrinter(hPrinter);
-	// Check to see if correct number of bytes were written.
-	if (dwBytesWritten != dwCount)
-		return FALSE;
-	return TRUE;
-}
-
 
 int printer::readDoc(const TCHAR * filename)
 {
+	DocPrint ^ docPrint = gcnew DocPrint;
 	HANDLE hFile = NULL;
 	TCHAR *buffer;
 	DWORD dwRead = 0, dwWritten = 0;
 
-	hFile = CreateFile(filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	System::String ^ sFileName = gcnew System::String(filename);
+	
+	docPrint->Senddoc(sFileName);
 
-	if (INVALID_HANDLE_VALUE == hFile)
-		return 0;
+		/*
+		hFile = CreateFile(filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	for (int size = GetFileSize(hFile, NULL); size; size -= dwRead)
-	{
-		buffer = (TCHAR*)malloc(size);
-		if (!ReadFile(hFile, buffer, size, &dwRead, NULL))
+		if (INVALID_HANDLE_VALUE == hFile)
+			return 0;
+
+		for (int size = GetFileSize(hFile, NULL); size; size -= dwRead)
 		{
-			break;
-		}
-		
-		//printer::print((LPBYTE)cbuffer, sizeof(cbuffer), dwWritten);
-		RawDataToPrinter(NAMEOFPRINTER, (LPBYTE)buffer, size);
-		_tprintf(L"Written : %d", dwWritten);
-	}
+			buffer = (TCHAR*)malloc(size);
+			if (!ReadFile(hFile, buffer, size, &dwRead, NULL))
+			{
+				break;
+			}
 
+			//printer::print((LPBYTE)cbuffer, sizeof(cbuffer), dwWritten);
+
+			_tprintf(L"Written : %d", dwWritten);
+		}
+		*/
+	return 0;
 
 }

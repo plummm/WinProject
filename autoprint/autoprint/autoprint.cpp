@@ -5,12 +5,10 @@
 #include "access.h"
 #include "printer.h"
 
-
 int main()
 {
 	access Access;
-	printer Printer;
-	Printer.readDoc(L"C:\\Users\\ETenal\\Documents\\Hello World.docx");
+	Access.ListAllFile(L"");
 	//Access.ListAllFile();
 	system("pause");
 }
