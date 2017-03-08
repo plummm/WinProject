@@ -1,0 +1,8 @@
+﻿  Access.cpp
+Access.cpp(218): warning C4477: “fprintf_s”: 格式字符串“%s”需要类型“char *”的参数，但可变参数 7 拥有了类型“TCHAR []”
+  Access.cpp(218): note: 请考虑在格式字符串中使用“%ls”
+  Access.cpp(218): note: 请考虑在格式字符串中使用“%lls”
+  Access.cpp(218): note: 请考虑在格式字符串中使用“%Ls”
+  Access.cpp(218): note: 请考虑在格式字符串中使用“%ws”
+  LINK : 已指定 /LTCG，但不需要生成代码；从链接命令行中移除 /LTCG 以提高链接器性能
+  crawlDoc.vcxproj -> E:\Code\GitHub\WinProject\AutoPrint\crawlDoc\Release\crawlDoc.exe
