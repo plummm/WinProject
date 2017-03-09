@@ -1,4 +1,5 @@
-﻿  UniversalDllInjectTemplate.cpp
+﻿  stdafx.cpp
+  UniversalDllInjectTemplate.cpp
 UniversalDllInjectTemplate.cpp(61): warning C4311: “类型转换”: 从“HMODULE”到“ULONG”的指针截断
 UniversalDllInjectTemplate.cpp(61): warning C4302: “类型转换”: 从“HMODULE”到“ULONG”截断
 UniversalDllInjectTemplate.cpp(69): warning C4312: “类型转换”: 从“ULONG”转换到更大的“PVOID”
@@ -15,10 +16,14 @@ UniversalDllInjectTemplate.cpp(188): warning C4477: “wprintf”: 格式字符�
 UniversalDllInjectTemplate.cpp(188): warning C4313: “wprintf”: 格式字符串中的“%x”与“LPVOID”类型的参数 1 冲突
 UniversalDllInjectTemplate.cpp(196): warning C4477: “wprintf”: 格式字符串“%x”需要类型“unsigned int”的参数，但可变参数 1 拥有了类型“LPTHREAD_START_ROUTINE”
 UniversalDllInjectTemplate.cpp(196): warning C4313: “wprintf”: 格式字符串中的“%x”与“LPTHREAD_START_ROUTINE”类型的参数 1 冲突
+UniversalDllInjectTemplate.cpp(261): warning C4477: “wprintf”: 格式字符串“%s”需要类型“wchar_t *”的参数，但可变参数 1 拥有了类型“DWORD”
+UniversalDllInjectTemplate.cpp(261): warning C4313: “wprintf”: 格式字符串中的“%s”与“DWORD”类型的参数 1 冲突
+UniversalDllInjectTemplate.cpp(263): warning C4477: “wprintf”: 格式字符串“%s”需要类型“wchar_t *”的参数，但可变参数 1 拥有了类型“DWORD”
+UniversalDllInjectTemplate.cpp(263): warning C4313: “wprintf”: 格式字符串中的“%s”与“DWORD”类型的参数 1 冲突
   正在生成代码
-  1 of 15 functions ( 6.7%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  13 of 13 functions (100.0%) were compiled, the rest were copied from previous compilation.
+    2 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   已完成代码的生成
   UniversalDllInjectTemplate.vcxproj -> F:\GitHub\WinProject\DLLInject\UniversalDllInjectTemplate\x64\Release\UniversalDllInjectTemplate.exe
   UniversalDllInjectTemplate.vcxproj -> F:\GitHub\WinProject\DLLInject\UniversalDllInjectTemplate\x64\Release\UniversalDllInjectTemplate.pdb (Full PDB)

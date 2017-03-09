@@ -203,25 +203,65 @@ BOOL InjectDll(DWORD dwPID, LPCTSTR szDllPath)
 	return TRUE;
 
 }
+
+
+DWORD WINAPI exectarget(LPVOID lpParameter)
+{
+	system("SuperSocks5Cap.exe");
+	return 0;
+}
+
 int _tmain(int argc, TCHAR *argv[])
 {
-	
+	/*
 	if (argc != 3)
 	{
 		//printf("argv[0]:%s argv[1]:%s argv[2]:%s\n", argv[0], argv[1], argv[2]);
-		_tprintf(L"USAGE : %s pid dll_path\n", argv[0]);
+		_tprintf(L"USAGE : %s dll_path pid\n", argv[0]);
 		return 1;
 	}
-
+	
 	_tprintf(L"[+] Setting Debug Privileges [%ld]\n", SetDebugPrivileges());
 	//printf("argv[0]:%s argv[1]:%s argv[2]:%s\n", argv[0], _tstol(argv[1]), argv[2]);
-	if (InjectDll((DWORD)_tstol(argv[1]), argv[2]))
-		_tprintf(TEXT("InjectDll(\"%s\") success!!!\n"), argv[2]);
+	if (InjectDll((DWORD)_tstol(argv[2]), argv[1]))
+		_tprintf(TEXT("InjectDll(\"%s\") success!!!\n"), argv[1]);
 	else
-		_tprintf(L"InjectDll(\"%s\") failed!!!\n", argv[2]);
+		_tprintf(L"InjectDll(\"%s\") failed!!!\n", argv[1]);
 		
 	system("pause");
 	return 0;
+	*/
+
+	TCHAR dll_path[MAX_PATH] = { 0, };
+	TCHAR target_path[MAX_PATH] = { 0, };
+	HWND hWnd;
+	DWORD pid = 0;
+	TCHAR szOutputText[1024] = { 0, };
+	LPVOID lpParameter = NULL;
+
+	GetCurrentDirectory(MAX_PATH, dll_path);
+	wcscpy_s(target_path, dll_path);
+	wcscat_s(dll_path, MAX_PATH, L"\\SuperSocks5Cap-patch.dll");
+	wcscat_s(target_path, MAX_PATH, L"\\SuperSocks5Cap.exe");
+	CreateThread(
+		NULL,                   // default security attributes
+		0,                      // use default stack size  
+		exectarget,       // thread function name
+		lpParameter,          // argument to thread function 
+		0,                      // use default creation flags 
+		NULL);   // returns the thread identifier 
+	
+	Sleep(5000);
+	hWnd= FindWindowA(NULL, "Super Socks5Cap 3.8.2.0 - 普通用户权限启动");
+	GetWindowThreadProcessId(hWnd,&pid);
+	
+	_tprintf(L"pid:%d path:%s", pid, dll_path);
+
+	if (InjectDll((DWORD)pid, (LPCTSTR)dll_path))
+		_tprintf(TEXT("InjectDll(\"%s\") success!!!\n"), pid);
+	else
+		_tprintf(L"InjectDll(\"%s\") failed!!!\n", pid);
+		
 }
 
 
