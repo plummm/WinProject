@@ -11,12 +11,37 @@ Access::Access()
 	
 }
 
-int Access::CheckExtension(TCHAR fileName[MAX_PATH])
+int Access::CheckPass(TCHAR fileName[MAX_PATH], int flag)
 {
-	TCHAR *pos = NULL;
-	
-	pos = wcsrchr(fileName, '.');
-	return (StrCmpW(pos+1, L"doc")==0 || StrCmpW(pos + 1, L"docx")==0);
+	switch (flag)
+	{
+	case EXTENSION:
+	{
+		TCHAR *pos = NULL;
+
+		pos = wcsrchr(fileName, '.');
+		return (StrCmpW(pos + 1, L"doc") == 0 || StrCmpW(pos + 1, L"docx") == 0);
+		break;
+	}
+	case DORMITORYNUM:
+	{
+		size_t length_of_name = 0;
+		int dormitory_num = 0;
+		StringCchLength(fileName, MAX_PATH, &length_of_name);
+		if (length_of_name == 3)
+		{
+			dormitory_num = _wtoi(fileName);
+			if (dormitory_num == 0) return 0;
+			if (dormitory_num / 100 > 6) return 0;
+			if (dormitory_num % 100 > 28) return 0;
+			return 1;
+		}
+		break;
+	}
+	default:
+		break;
+	}
+	return 0;
 }
 
 void Access::Clear()
@@ -77,6 +102,10 @@ int Access::ListAllFile(TCHAR szDirAdd[MAX_PATH])
 
 		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
+			if (!this->CheckPass(ffd.cFileName, DORMITORYNUM))
+			{
+				continue;
+			}
 			//_tprintf(TEXT("  %s   <DIR>\n"), ffd.cFileName);
 			StringCchPrintf(szDirAdd, MAX_PATH, L"%s\\%s", szDirAdd, ffd.cFileName);
 			//StringCchCat(szDirAdd, MAX_PATH, ffd.cFileName);
@@ -91,14 +120,14 @@ int Access::ListAllFile(TCHAR szDirAdd[MAX_PATH])
 			filesize.LowPart = ffd.nFileSizeLow;
 			filesize.HighPart = ffd.nFileSizeHigh;
 			//if (StrCmpW(ffd.cFileName, L"426") == 0 && length_of_name <= MAX_PATH - 4)
-			if (!this->CheckExtension(ffd.cFileName) || filesize.QuadPart > 5000)
+			if (!this->CheckPass(ffd.cFileName, EXTENSION) || filesize.QuadPart > 102400 || StrCmpW(szDirBack, PRINTPATH)==0 )
 			{
 				continue;
 			}
 			this->CopyFileFromNas(szName, szPrintedName);
-			//MessageBox(NULL, L"Printing...", L"Print", MB_OK);
+			MessageBox(NULL, L"Printing...", L"Print", MB_OK);
 			_tprintf(L"%s\n", szName);
-			this->printer.readDoc(szName);
+			//this->printer.readDoc(szName);
 			this->DeleteFileFromNas(szName);
 			//_tprintf(TEXT("  %s   %ld bytes\n"), ffd.cFileName, filesize.QuadPart);
 		}
@@ -215,6 +244,6 @@ void PrintLog(TCHAR log[1024], int dwError)
 	SYSTEMTIME systemTime;
 	GetSystemTime(&systemTime);
 	if (&systemTime != NULL)
-		fprintf_s(stream, "%d-%d-%d %d:%d:%d  %s Error %d\n", systemTime.wYear, systemTime.wMonth, systemTime.wDay,
+		fwprintf_s(stream, L"%d-%d-%d %d:%d:%d  %s Error %d\n", systemTime.wYear, systemTime.wMonth, systemTime.wDay,
 			systemTime.wHour, systemTime.wMinute, systemTime.wSecond, log, dwError);
 }

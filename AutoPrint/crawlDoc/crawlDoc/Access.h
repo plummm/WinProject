@@ -8,7 +8,7 @@ public:
 	int DeleteFileFromNas(TCHAR szName[MAX_PATH]);
 	int CopyFileFromNas(TCHAR szSrcName[MAX_PATH], TCHAR szDestName[MAX_PATH]);
 	int DeleteDir(TCHAR szName[MAX_PATH]);
-	int CheckExtension(TCHAR fileName[MAX_PATH]);
+	int CheckPass(TCHAR fileName[MAX_PATH], int flag);
 	void Clear();
 
 private:

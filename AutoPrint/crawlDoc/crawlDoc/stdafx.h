@@ -13,9 +13,10 @@
 #include <Shlwapi.h>
 #include <strsafe.h>
 #include <iostream>
+#include <regex>
 #include <msclr/marshal_cppstd.h>
 
-//#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 #pragma comment(lib, "User32.lib")
 #pragma comment(lib, "Shlwapi.lib")
 #pragma comment(lib, "Winspool.lib")
@@ -24,6 +25,8 @@
 #define ALREADYPRINTPATH L"\\\\PERSONALCLOUD\\Public\\Printed"
 #define CLOUDPATH L"\\\\PERSONALCLOUD\\Public"
 #define NAMEOFPRINTER L"HP Deskjet F2100 series"
+#define EXTENSION 0
+#define DORMITORYNUM 1
 
 
 // TODO: 在此处引用程序需要的其他头文件
