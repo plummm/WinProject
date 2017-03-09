@@ -1,0 +1,9 @@
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\bin\Release\sendToPrinter.dll.config
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\bin\Release\sendToPrinter.dll
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\bin\Release\sendToPrinter.pdb
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Release\Interop.ACTIVEXLib.dll
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Release\Interop.Microsoft.Office.Core.dll
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Release\sendToPrinter.csproj.ResolveComReference.cache
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Release\sendToPrinter.dll
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Release\sendToPrinter.pdb
+F:\GitHub\WinProject\autoprint\sendToPrinter\sendToPrinter\obj\Release\sendToPrinter.csprojResolveAssemblyReference.cache
