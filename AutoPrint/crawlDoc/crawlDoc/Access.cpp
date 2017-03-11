@@ -120,14 +120,14 @@ int Access::ListAllFile(TCHAR szDirAdd[MAX_PATH])
 			filesize.LowPart = ffd.nFileSizeLow;
 			filesize.HighPart = ffd.nFileSizeHigh;
 			//if (StrCmpW(ffd.cFileName, L"426") == 0 && length_of_name <= MAX_PATH - 4)
-			if (!this->CheckPass(ffd.cFileName, EXTENSION) || filesize.QuadPart > 102400 || StrCmpW(szDirBack, PRINTPATH)==0 )
+			if (!this->CheckPass(ffd.cFileName, EXTENSION) || filesize.QuadPart > 102400)
 			{
 				continue;
 			}
 			this->CopyFileFromNas(szName, szPrintedName);
-			MessageBox(NULL, L"Printing...", L"Print", MB_OK);
+			//MessageBox(NULL, L"Printing...", L"Print", MB_OK);
 			_tprintf(L"%s\n", szName);
-			//this->printer.readDoc(szName);
+			this->printer.readDoc(szName);
 			this->DeleteFileFromNas(szName);
 			//_tprintf(TEXT("  %s   %ld bytes\n"), ffd.cFileName, filesize.QuadPart);
 		}
@@ -142,8 +142,8 @@ int Access::ListAllFile(TCHAR szDirAdd[MAX_PATH])
 	}
 
 	FindClose(hFind);
-
-	this->DeleteDir(szDirBack);
+	if (StrCmpW(szDirBack, PRINTPATH) != 0)
+		this->DeleteDir(szDirBack);
 	return dwError;
 }
 
