@@ -33,12 +33,14 @@ namespace AutoBackup
                 this.Drives.Add(new Drive(driveInfo.Name, driveInfo.IsReady));
             }
         }
+
+        //Children 
         public void LoadChildren(Drive d)
         {
             foreach (string directory in System.IO.Directory.GetDirectories(d.Name))
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(directory);
-                d.Children.Add(new Directory(directoryInfo.Parent.FullName, directoryInfo.Name));
+                d.Children.Add(new Directory(directory, directoryInfo.Name));
             }
             foreach (string file in System.IO.Directory.GetFiles(d.Name))
             {

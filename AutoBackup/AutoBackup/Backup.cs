@@ -49,23 +49,27 @@ namespace AutoBackup
                     {
                         // Use static Path methods to extract only the file name from the path.
                         fileName = System.IO.Path.GetFileName(s);
-                        string targetFile = System.IO.Path.Combine(targetPath, fileName);
-                        System.IO.File.Copy(s, targetFile, true);
+                        string targetFile = System.IO.Path.Combine(destFile, fileName);
+                        try
+                        {
+                            // Will not overwrite if the destination file already exists.
+                            System.IO.File.Copy(s, targetFile, true);
+                        }
+
+                        // Catch exception if the file was already copied.
+                        catch (System.IO.IOException copyError)
+                        {
+                            
+                        }
                     }
 
                     foreach (string s in directories)
                     {
                         CopyFile(sourceFile, destFile, System.IO.Path.GetFileName(s));
+                        
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Source path does not exist!");
-                }
 
-                // Keep console window open in debug mode.
-                Console.WriteLine("Press any key to exit.");
-                Console.ReadKey();
             }
         }
     }

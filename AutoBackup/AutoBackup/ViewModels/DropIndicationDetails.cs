@@ -6,7 +6,7 @@ namespace AutoBackup.ViewModels
 {
 public class DropIndicationDetails : ViewModelBase
 {
-    private object currentDraggedItem;
+    private object[] currentDraggedItem;
     private DropPosition currentDropPosition;
     private object currentDraggedOverItem;
 
@@ -44,7 +44,7 @@ public class DropIndicationDetails : ViewModelBase
         }
     }
 
-    public object CurrentDraggedItem
+    public object[] CurrentDraggedItem
     {
         get
         {

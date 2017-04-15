@@ -88,10 +88,10 @@ namespace AutoBackup
                 if (destinationItems != null)
                 {
                     var backup = new Backup();
-                    var source = (dropDetails.CurrentDraggedItem as ProductViewModel);
+                    var source = (dropDetails.CurrentDraggedItem[0] as ProductViewModel);
                     var dest = (dropDetails.CurrentDraggedOverItem as ProductViewModel);
-                    string destPath = dest.FullPath + dest.Name;
-                    backup.CopyFile(source.FullPath, destPath, source.Name);
+                    //string destPath = dest.FullPath + dest.Name;
+                    backup.CopyFile(System.IO.Path.GetDirectoryName(source.FullPath), dest.FullPath, source.Name);
                     int dropIndex = dropDetails.DropIndex >= destinationItems.Count ? destinationItems.Count : dropDetails.DropIndex < 0 ? 0 : dropDetails.DropIndex;
                     this.destinationItems.Insert(dropIndex, data);
                 }

@@ -123,7 +123,7 @@ namespace AutoBackup.Behaviors
             var listBoxItem = e.OriginalSource as System.Windows.Controls.ListBoxItem ?? (e.OriginalSource as FrameworkElement).ParentOfType<System.Windows.Controls.ListBoxItem>();
 
             var item = listBoxItem != null ? listBoxItem.DataContext : (sender as System.Windows.Controls.ListBox).SelectedItem;
-            details.CurrentDraggedItem = item;
+            details.CurrentDraggedItem[0] = item;
 
             IDragPayload dragPayload = DragDropPayloadManager.GeneratePayload(null);
 
@@ -203,7 +203,7 @@ namespace AutoBackup.Behaviors
             else
             {*/
                 (options.DragVisual as TreeViewDragVisual).IsDropPossible = true;
-                options.DropAction = DropAction.Move;
+                options.DropAction = DropAction.Copy;
                 options.UpdateDragVisual();
            // }
             e.Handled = true;
