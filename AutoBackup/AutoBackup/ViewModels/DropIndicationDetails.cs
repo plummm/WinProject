@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Linq;
 using Telerik.Windows.Controls;
+using System.Collections.Generic;
 
 namespace AutoBackup.ViewModels
 {
 public class DropIndicationDetails : ViewModelBase
 {
-    private object[] currentDraggedItem;
+    private List<ProductViewModel> currentDraggedItem;
     private DropPosition currentDropPosition;
     private object currentDraggedOverItem;
 
-    public object CurrentDraggedOverItem
+        public object CurrentDraggedOverItem
     {
+
         get
         {
             return currentDraggedOverItem;
@@ -44,7 +46,7 @@ public class DropIndicationDetails : ViewModelBase
         }
     }
 
-    public object[] CurrentDraggedItem
+    public List<ProductViewModel> CurrentDraggedItem
     {
         get
         {

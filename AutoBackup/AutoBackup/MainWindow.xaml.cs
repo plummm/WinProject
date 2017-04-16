@@ -6,6 +6,7 @@ using System.Windows;
 using AutoBackup.ViewModels;
 using Telerik.Windows.DragDrop;
 using Telerik.Windows.Controls;
+using System.Collections.Generic;
 
 namespace AutoBackup
 {
@@ -32,7 +33,7 @@ namespace AutoBackup
         private void RadTreeView_LoadOnDemand(object sender, Telerik.Windows.RadRoutedEventArgs e)
         {
             e.Handled = true;
-            RadTreeViewItem expandedItem = e.OriginalSource as RadTreeViewItem;
+            RadTreeViewItem expandedItem = e.OriginalSource as RadTreeViewItem ?? (e.OriginalSource as FrameworkElement).ParentOfType<RadTreeViewItem>();
             if (expandedItem == null)
                 return;
 
@@ -58,6 +59,7 @@ namespace AutoBackup
             }
         }
 
+
         private static Drive GetDrive(RadTreeViewItem expandedItem)
         {
             return expandedItem.Item as Drive;
@@ -78,7 +80,7 @@ namespace AutoBackup
 
         private void OnDrop(object sender, Telerik.Windows.DragDrop.DragEventArgs e)
         {
-            var data = DragDropPayloadManager.GetDataFromObject(e.Data, "DraggedData");
+            var data = (IList)DragDropPayloadManager.GetDataFromObject(e.Data, "DraggedData");
             if (data == null) return;
             if (e.Effects != DragDropEffects.None)
             {
@@ -88,12 +90,19 @@ namespace AutoBackup
                 if (destinationItems != null)
                 {
                     var backup = new Backup();
-                    var source = (dropDetails.CurrentDraggedItem[0] as ProductViewModel);
-                    var dest = (dropDetails.CurrentDraggedOverItem as ProductViewModel);
-                    //string destPath = dest.FullPath + dest.Name;
-                    backup.CopyFile(System.IO.Path.GetDirectoryName(source.FullPath), dest.FullPath, source.Name);
-                    int dropIndex = dropDetails.DropIndex >= destinationItems.Count ? destinationItems.Count : dropDetails.DropIndex < 0 ? 0 : dropDetails.DropIndex;
-                    this.destinationItems.Insert(dropIndex, data);
+                    for (int i = 0; i < dropDetails.CurrentDraggedItem.Count; i++)
+                    {
+                        var source = (dropDetails.CurrentDraggedItem[i] as ProductViewModel);
+                        var dest = (dropDetails.CurrentDraggedOverItem as ProductViewModel);
+                        string sourcePath = System.IO.Path.GetDirectoryName(source.FullPath);
+                        if (destinationItems.Count == 0)
+                        {
+                            RadTreeView_LoadOnDemand(null, e);
+                        }
+                        backup.CopyFile(sourcePath, dest.FullPath, source.Name);
+                        int dropIndex = dropDetails.DropIndex >= destinationItems.Count ? destinationItems.Count : dropDetails.DropIndex < 0 ? 0 : dropDetails.DropIndex;
+                        this.destinationItems.Insert(dropIndex, data[i]);
+                    }
                 }
             }
         }

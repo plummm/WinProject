@@ -107,7 +107,8 @@
                              IsLoadOnDemandEnabled="True"
                              ItemPrepared="RadTreeView_ItemPrepared"
                              LoadOnDemand="RadTreeView_LoadOnDemand"
-                             Padding="5" SelectionChanged="AllProductsView_SelectionChanged">
+                             Padding="5" SelectionChanged="AllProductsView_SelectionChanged"
+                             SelectionMode="Extended">
             <telerik:RadTreeViewItem Header="MyComputer"
                                      ItemContainerStyleSelector="{StaticResource ItemStyleSelector}"
                                      ItemsSource="{Binding Source={x:Static example:ServiceFacade.Instance},
@@ -121,7 +122,7 @@
                  FontSize="11"
                  ItemTemplate="{StaticResource WishlistProduct}"
                  Padding="5"
-                 SelectionMode="Extended"
+                 SelectionMode="Multiple"
                  behavior:ListBoxDragDropBehavior.IsEnabled="True">
             <ListBox.Resources>
                 <DataTemplate x:Key="DraggedItemTemplate">

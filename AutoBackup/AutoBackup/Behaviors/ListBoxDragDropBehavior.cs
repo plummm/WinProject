@@ -9,7 +9,8 @@ using Telerik.Windows.DragDrop.Behaviors;
 using System.Collections;
 using System.Windows.Input;
 using Telerik.Windows.Controls.TreeView;
-using System.IO;
+using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace AutoBackup.Behaviors
 {
@@ -120,11 +121,19 @@ namespace AutoBackup.Behaviors
         private void OnDragInitialize(object sender, DragInitializeEventArgs e)
         {
             DropIndicationDetails details = new DropIndicationDetails();
+            //DragDropPayloadManager.GetDataFromObject(e.Data, )
+            //ListBoxItem itemA = (ListBoxItem)VisualTreeHelper.GetParent(e.OriginalSource as UIElement);  
             var listBoxItem = e.OriginalSource as System.Windows.Controls.ListBoxItem ?? (e.OriginalSource as FrameworkElement).ParentOfType<System.Windows.Controls.ListBoxItem>();
+            // var item = listBoxItem != null ? listBoxItem.DataContext : (sender as System.Windows.Controls.ListBox).ItemsSource;
 
-            var item = listBoxItem != null ? listBoxItem.DataContext : (sender as System.Windows.Controls.ListBox).SelectedItem;
-            details.CurrentDraggedItem[0] = item;
+            List<ProductViewModel> item = new List<ProductViewModel>();
+            item = (sender as System.Windows.Controls.ListBox).SelectedItems.Cast<ProductViewModel>().ToList<ProductViewModel>();
+            if (listBoxItem != null)
+            {
+                item.Add(listBoxItem.DataContext as ProductViewModel);
+            }
 
+            details.CurrentDraggedItem = item;
             IDragPayload dragPayload = DragDropPayloadManager.GeneratePayload(null);
 
             dragPayload.SetData("DraggedData", item);
@@ -162,7 +171,7 @@ namespace AutoBackup.Behaviors
         {
             TreeViewDragDropOptions options = DragDropPayloadManager.GetDataFromObject(e.Data, TreeViewDragDropOptions.Key) as TreeViewDragDropOptions;
             if (options == null) return;
-            var draggedItem = options.DraggedItems.FirstOrDefault();
+            var draggedItem = options.DraggedItems.Cast<ProductViewModel>().ToList();
 
             if (draggedItem == null)
             {
@@ -172,7 +181,8 @@ namespace AutoBackup.Behaviors
             if (e.Effects != DragDropEffects.None)
             {
                 var collection = (sender as System.Windows.Controls.ListBox).ItemsSource as IList;
-                collection.Add(draggedItem);
+                foreach (var s in draggedItem)
+                    collection.Add(s);
             }
 
             e.Handled = true;

@@ -45,7 +45,7 @@ namespace AutoBackup
             foreach (string file in System.IO.Directory.GetFiles(d.Name))
             {
                 FileInfo fileInfo = new FileInfo(file);
-                d.Children.Add(new File(fileInfo.DirectoryName, fileInfo.Name));
+                d.Children.Add(new File(file, fileInfo.Name));
             }
         }
 
