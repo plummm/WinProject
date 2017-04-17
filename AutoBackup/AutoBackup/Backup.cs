@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AutoBackup
 {
@@ -25,7 +26,19 @@ namespace AutoBackup
 
                 // To copy a file to another location and 
                 // overwrite the destination file if it already exists.
-                System.IO.File.Copy(sourceFile, destFile, true);
+                try
+                {
+                    System.IO.File.Copy(sourceFile, destFile, true);
+                }
+                catch (UnauthorizedAccessException copyError)
+                {
+                    MessageBox.Show("请使用管理员权限运行程序");
+                    return;
+                }
+                catch (System.IO.IOException c)
+                {
+                    MessageBox.Show("找不到目标路径或原始路径");
+                }
             }
             else
             { 
@@ -57,9 +70,14 @@ namespace AutoBackup
                         }
 
                         // Catch exception if the file was already copied.
-                        catch (System.IO.IOException copyError)
+                        catch (UnauthorizedAccessException copyError)
                         {
-                            
+                            MessageBox.Show("请使用管理员权限运行程序");
+                            return;
+                        }
+                        catch (System.IO.IOException c)
+                        {
+                            MessageBox.Show("找不到目标路径或原始路径");
                         }
                     }
 

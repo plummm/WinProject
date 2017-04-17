@@ -4,7 +4,8 @@
         xmlns:example="clr-namespace:AutoBackup"
         xmlns:behavior="clr-namespace:AutoBackup.Behaviors"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-        Title="这是一个提高效率的复制备份工具">
+        Title="这是一个提高效率的复制备份工具"
+        Icon="/Images/icon.jpg">
     <Grid x:Name="LayoutRoot"
           Margin="8"
           Background="White">
@@ -125,6 +126,9 @@
                  SelectionMode="Multiple"
                  behavior:ListBoxDragDropBehavior.IsEnabled="True">
             <ListBox.Resources>
+                <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource ResourceKey={x:Type ListBox}}">
+                    <EventSetter Event="KeyDown" Handler="ListBoxKeyDown"/>
+                </Style>
                 <DataTemplate x:Key="DraggedItemTemplate">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">

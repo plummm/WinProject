@@ -7,12 +7,17 @@ using AutoBackup.ViewModels;
 using Telerik.Windows.DragDrop;
 using Telerik.Windows.Controls;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace AutoBackup
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
+    enum keydown
+    {
+        Delete
+    }
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -182,6 +187,20 @@ namespace AutoBackup
         private void AllProductsView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void ListBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            
+            var collection = (sender as System.Windows.Controls.ListBox).ItemsSource as IList;
+            var selections = (sender as System.Windows.Controls.ListBox).SelectedItems as IList;
+
+            if (e.Key == System.Windows.Input.Key.Delete)
+            {
+                while (selections.Count!=0)
+                    collection.Remove(selections[0]);
+                
+            }
         }
     }
 }
