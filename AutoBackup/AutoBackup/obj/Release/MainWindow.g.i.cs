@@ -12,6 +12,7 @@
 using AutoBackup;
 using AutoBackup.Behaviors;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Automation;
@@ -59,7 +60,7 @@ namespace AutoBackup {
     public partial class MainWindow : System.Windows.Window, System.Windows.Markup.IComponentConnector, System.Windows.Markup.IStyleConnector {
         
         
-        #line 9 "..\..\MainWindow.xaml"
+        #line 16 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Grid LayoutRoot;
         
@@ -67,7 +68,7 @@ namespace AutoBackup {
         #line hidden
         
         
-        #line 102 "..\..\MainWindow.xaml"
+        #line 109 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal Telerik.Windows.Controls.RadTreeView allProductsView;
         
@@ -75,9 +76,25 @@ namespace AutoBackup {
         #line hidden
         
         
-        #line 120 "..\..\MainWindow.xaml"
+        #line 127 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.ListBox wishlistView;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 154 "..\..\MainWindow.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.ProgressBar copyProgress;
+        
+        #line default
+        #line hidden
+        
+        
+        #line 155 "..\..\MainWindow.xaml"
+        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        internal System.Windows.Controls.ProgressBar ProgressControl;
         
         #line default
         #line hidden
@@ -120,31 +137,57 @@ namespace AutoBackup {
             switch (connectionId)
             {
             case 1:
-            this.LayoutRoot = ((System.Windows.Controls.Grid)(target));
+            
+            #line 12 "..\..\MainWindow.xaml"
+            ((System.ComponentModel.BackgroundWorker)(target)).DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
+            
+            #line default
+            #line hidden
+            
+            #line 13 "..\..\MainWindow.xaml"
+            ((System.ComponentModel.BackgroundWorker)(target)).ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
+            
+            #line default
+            #line hidden
+            
+            #line 14 "..\..\MainWindow.xaml"
+            ((System.ComponentModel.BackgroundWorker)(target)).RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
+            
+            #line default
+            #line hidden
             return;
             case 2:
+            this.LayoutRoot = ((System.Windows.Controls.Grid)(target));
+            return;
+            case 3:
             this.allProductsView = ((Telerik.Windows.Controls.RadTreeView)(target));
             
-            #line 109 "..\..\MainWindow.xaml"
+            #line 116 "..\..\MainWindow.xaml"
             this.allProductsView.ItemPrepared += new System.EventHandler<Telerik.Windows.Controls.RadTreeViewItemPreparedEventArgs>(this.RadTreeView_ItemPrepared);
             
             #line default
             #line hidden
             
-            #line 110 "..\..\MainWindow.xaml"
+            #line 117 "..\..\MainWindow.xaml"
             this.allProductsView.LoadOnDemand += new System.EventHandler<Telerik.Windows.RadRoutedEventArgs>(this.RadTreeView_LoadOnDemand);
             
             #line default
             #line hidden
             
-            #line 111 "..\..\MainWindow.xaml"
+            #line 118 "..\..\MainWindow.xaml"
             this.allProductsView.SelectionChanged += new System.Windows.Controls.SelectionChangedEventHandler(this.AllProductsView_SelectionChanged);
             
             #line default
             #line hidden
             return;
-            case 3:
+            case 4:
             this.wishlistView = ((System.Windows.Controls.ListBox)(target));
+            return;
+            case 6:
+            this.copyProgress = ((System.Windows.Controls.ProgressBar)(target));
+            return;
+            case 7:
+            this.ProgressControl = ((System.Windows.Controls.ProgressBar)(target));
             return;
             }
             this._contentLoaded = true;
@@ -160,11 +203,11 @@ namespace AutoBackup {
             System.Windows.EventSetter eventSetter;
             switch (connectionId)
             {
-            case 4:
+            case 5:
             eventSetter = new System.Windows.EventSetter();
             eventSetter.Event = System.Windows.UIElement.KeyDownEvent;
             
-            #line 130 "..\..\MainWindow.xaml"
+            #line 137 "..\..\MainWindow.xaml"
             eventSetter.Handler = new System.Windows.Input.KeyEventHandler(this.ListBoxKeyDown);
             
             #line default

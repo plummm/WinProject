@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "DrvCtrl.h"
 #include <string.h>
+#include <WinBase.h>
+#include <iostream>
 
 #define DRIVERPATH 2
 #define OPERATOR 1
@@ -15,6 +17,7 @@ int _tmain(int argc, TCHAR *argv[])
 	BOOL b;
 	DWORD ctl = 0;
 	DWORD x = 0, y = 0;
+	WCHAR *output = NULL;
 	DrvCtrl dc;
 	WCHAR szSvcLnkName[MAX_PATH];
 	WCHAR p[MAX_PATH];
@@ -50,13 +53,23 @@ int _tmain(int argc, TCHAR *argv[])
 				if (argc >= 5)
 				{
 					x = (DWORD)_tstol(argv[INPUT]);
-					b = dc.IoControl(0x800, &x, sizeof(x), &y, sizeof(y));
-					_tprintf(L"%d INPUT=%ld  OUTPUT=%ld\n", b, x, y);
+					b = dc.IoControl(ctl, &x, sizeof(x), &y, sizeof(y));
+					_tprintf(L"%d INPUT=%ld  OUTPUT=%ld ctl=%d\n", b, x, y, ctl);
 				}
 				else
 				{
-					b = dc.IoControl(0x800, 0, 0, 0, 0);
-					_tprintf(L"%d INPUT=%ld  OUTPUT=%ld\n", b, x, y);
+					//output = (printList*)malloc(sizeof(printList));
+					int size = dc.Get_size(ctl);
+					//int size = 9000;
+					output = (WCHAR*)malloc(size);
+					memset(output, 0, size);
+					b = dc.IoControl(ctl, NULL, 0, output, size);
+					_tprintf(L"%d ctl=%d\n", b, ctl);
+					//for (printList* t=(printList*)output;t;t=t->next)
+					//std::wcout << (output+100) << std::endl;
+					wprintf(L"%d OUTPUT=\n%s\n", b, (WCHAR*)output);
+					//DWORD dw = 0;
+					//WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE), output, wcslen(output), &dw, NULL);
 				}
 			}
 		}

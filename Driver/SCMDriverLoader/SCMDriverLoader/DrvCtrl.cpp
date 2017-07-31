@@ -58,6 +58,19 @@ BOOL DrvCtrl::GetSvcHandle(PWCHAR pServiceName)
 	return TRUE;
 }
 
+DWORD DrvCtrl::Get_size(DWORD dwIoCode)
+{
+	DWORD dw = 0;
+	if (!DeviceIoControl(m_hDriver, CTL_CODE_GEN(dwIoCode),
+		0, 0, 0, 0, &dw, NULL))
+	{
+		PrintError();
+		return 0;
+	}
+	_tprintf(L"Output Size:%d\n", dw);
+	return dw;
+}
+
 BOOL DrvCtrl::Install(PWCHAR pSysPath, PWCHAR pServiceName, PWCHAR pDisplayName)
 {
 	m_pSysPath = pSysPath;
@@ -122,7 +135,7 @@ BOOL DrvCtrl::IoControl(DWORD dwIoCode, PVOID InBuff, DWORD InBufferLen,
 		PrintError();
 		return 0;
 	}
-
+	_tprintf(L"Output Size:%d %p\n", dw, OutBuff);
 	return 1;
 }
 

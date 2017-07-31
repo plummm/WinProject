@@ -1,6 +1,13 @@
 #pragma once
 #include <Windows.h>
 
+typedef
+struct OutList
+{
+	WCHAR* buffer;
+	struct OutList* next;
+} printList;
+
 class DrvCtrl
 {
 public:
@@ -19,6 +26,7 @@ public:
 	BOOL Start();
 	BOOL Stop();
 	BOOL Remove();
+	DWORD Get_size(DWORD dwIoCode);
 	BOOL Open(PWCHAR pLinkName);
 	BOOL IoControl(DWORD dwIoCode, PVOID InBuff, DWORD InBufferLen,
 		PVOID OutBuff, DWORD OutBuffLen);

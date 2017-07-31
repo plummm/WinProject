@@ -11,6 +11,7 @@ using System.Windows.Input;
 using Telerik.Windows.Controls.TreeView;
 using System.Windows.Media;
 using System.Windows.Controls;
+using AutoBackup;
 
 namespace AutoBackup.Behaviors
 {
@@ -134,6 +135,8 @@ namespace AutoBackup.Behaviors
             }
 
             details.CurrentDraggedItem = item;
+            //copyProgress.Maximum = item.Count;
+            
             IDragPayload dragPayload = DragDropPayloadManager.GeneratePayload(null);
 
             dragPayload.SetData("DraggedData", item);

@@ -73,6 +73,7 @@ namespace AutoBackup
                         catch (UnauthorizedAccessException copyError)
                         {
                             MessageBox.Show("请使用管理员权限运行程序");
+                            
                             return;
                         }
                         catch (System.IO.IOException c)

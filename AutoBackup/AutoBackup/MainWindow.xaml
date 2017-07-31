@@ -6,6 +6,7 @@
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="这是一个提高效率的复制备份工具"
         Icon="/Images/icon.jpg">
+
     <Grid x:Name="LayoutRoot"
           Margin="8"
           Background="White">
@@ -124,7 +125,7 @@
                  ItemTemplate="{StaticResource WishlistProduct}"
                  Padding="5"
                  SelectionMode="Multiple"
-                 behavior:ListBoxDragDropBehavior.IsEnabled="True">
+                 behavior:ListBoxDragDropBehavior.IsEnabled="True" Margin="0,0,0,34" RenderTransformOrigin="0.493,0.504">
             <ListBox.Resources>
                 <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource ResourceKey={x:Type ListBox}}">
                     <EventSetter Event="KeyDown" Handler="ListBoxKeyDown"/>
@@ -144,5 +145,6 @@
                 </DataTemplate>
             </ListBox.Resources>
         </ListBox>
+        
     </Grid>
 </Window>

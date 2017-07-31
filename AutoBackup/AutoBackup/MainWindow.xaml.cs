@@ -8,6 +8,7 @@ using Telerik.Windows.DragDrop;
 using Telerik.Windows.Controls;
 using System.Collections.Generic;
 using System.Windows.Input;
+using System.ComponentModel;
 
 namespace AutoBackup
 {
@@ -18,18 +19,23 @@ namespace AutoBackup
     {
         Delete
     }
+    
+
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
 
+
             // Set the items source of the controls:
             //allProductsView.ItemsSource = null;
             //allProductsView.ItemsSource = CategoryViewModel.Generate();
 
+            //var Background = new BackgroundWorkerTest();
             IList wishlistSource = new ObservableCollection<ProductViewModel>();
             wishlistView.ItemsSource = wishlistSource;
+            
 
             DragDropManager.AddDragOverHandler(allProductsView, OnItemDragOver);
             DragDropManager.AddDropHandler(allProductsView, OnDrop);
@@ -202,5 +208,7 @@ namespace AutoBackup
                 
             }
         }
+
+        
     }
 }
