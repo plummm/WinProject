@@ -1,14 +1,7 @@
 #pragma once
 
 #include "Driver.h"
-#include <intrin.h>
-
-typedef struct _SYSTEM_SERVICE_TABLE {
-	PVOID  		ServiceTableBase;
-	PVOID  		ServiceCounterTableBase;
-	ULONGLONG  	NumberOfServices;
-	PVOID  		ParamTableBase;
-} SYSTEM_SERVICE_TABLE, *PSYSTEM_SERVICE_TABLE;
+#include "SSDT_shadow.h"
 
 PSYSTEM_SERVICE_TABLE KeServiceDescriptorTable;
 
@@ -26,25 +19,6 @@ typedef NTSTATUS (__fastcall *PFTERMINATEPROCESS)(
 );
 
 PFTERMINATEPROCESS NtTerminateProcess = NULL;
-
-KIRQL WPOFFx64()
-{
-	KIRQL irql = KeRaiseIrqlToDpcLevel();
-	UINT64 cr0 = __readcr0();
-	cr0 &= 0xfffffffffffeffff;
-	__writecr0(cr0);
-	_disable();
-	return irql;
-}
-
-void WPONx64(KIRQL irql)
-{
-	UINT64 cr0 = __readcr0();
-	cr0 |= 0x10000;
-	_enable();
-	__writecr0(cr0);
-	KeLowerIrql(irql);
-}
 
 void ShowStuff0(LONG int32num)
 {
@@ -102,12 +76,12 @@ NTSTATUS __fastcall MyNtTerminateProcess(IN HANDLE ProcessHandle, IN NTSTATUS Ex
 		0, 
 		*PsProcessType, 
 		KernelMode, 
-		&Process, 
+		(PVOID *)&Process, 
 		NULL);
 	if (NT_SUCCESS(st))
 	{
 		DbgPrint("FileName:%s\n", PsGetProcessImageFileName(Process));
-		if (!_stricmp(PsGetProcessImageFileName(Process), "calc.exe"))
+		if (!_stricmp((char *)PsGetProcessImageFileName(Process), "calc.exe"))
 			return STATUS_ACCESS_DENIED;
 		else
 			return NtTerminateProcess(ProcessHandle, ExitStatus);
@@ -126,7 +100,7 @@ VOID FuckKeBugCheckEx(ULONGLONG fake_func)
 
 	DbgPrint("[KrnlProcExplr]FuckKeBugCheckEx\n");
 	myfunc = (ULONGLONG)fake_func;
-	memcpy(jmp_code + 2, &myfunc, 8);
+	memcpy(jmp_code + 2, &myfunc, 4);
 	irql = WPOFFx64();
 	memset(KeBugCheckEx, 0x90, 15);
 	memcpy(KeBugCheckEx, jmp_code, 12);
@@ -165,7 +139,7 @@ ULONGLONG GetSSDTFunctionAddress64(ULONGLONG NtApiIndex)
 	ULONGLONG add = 0;
 	PULONG ServiceTableBase = NULL;
 
-	ServiceTableBase = KeServiceDescriptorTable->ServiceTableBase;
+	ServiceTableBase = (PULONG)KeServiceDescriptorTable->ServiceTableBase;
 	//hHook->SSDTbase = ssdt->ServiceTableBase;
 	dwtmp = ServiceTableBase[NtApiIndex];
 	DbgPrint("ServiceTableBase:%llx\n", ServiceTableBase);
@@ -198,10 +172,10 @@ VOID HookSSDT(ULONGLONG index)
 	ULONGLONG ssdt = NULL;
 	ULONGLONG ssdt_old = NULL;
 
-	KeServiceDescriptorTable = GetKeServiceDescriptorTable64();
+	KeServiceDescriptorTable = (PSYSTEM_SERVICE_TABLE)GetKeServiceDescriptorTable64();
 	NtTerminateProcess = (PFTERMINATEPROCESS)GetSSDTFunctionAddress64(index);
-	FuckKeBugCheckEx(MyNtTerminateProcess);
-	ServiceTableBase = KeServiceDescriptorTable->ServiceTableBase;
+	FuckKeBugCheckEx((ULONGLONG)MyNtTerminateProcess);
+	ServiceTableBase = (PULONG)KeServiceDescriptorTable->ServiceTableBase;
 	ssdt_old = ServiceTableBase[index];
 	irql = WPOFFx64();
 	ServiceTableBase[index] = GetOffsetAddress((ULONGLONG)KeBugCheckEx);
@@ -209,7 +183,7 @@ VOID HookSSDT(ULONGLONG index)
 	DbgPrint("[KrnlProcExplr]HookSSDT{%d} to %llx\n",
 		index,
 		(ULONGLONG)KeBugCheckEx,
-		GetSSDTFunctionAddress64(index, ssdt));
+		GetSSDTFunctionAddress64(index));
 }
 
 VOID UnhookSSDT(ULONGLONG index)
@@ -217,32 +191,12 @@ VOID UnhookSSDT(ULONGLONG index)
 	KIRQL irql;
 	PULONG ServiceTableBase = NULL;
 
-	ServiceTableBase = KeServiceDescriptorTable->ServiceTableBase;
+	ServiceTableBase = (PULONG)KeServiceDescriptorTable->ServiceTableBase;
 	irql = WPOFFx64();
 	ServiceTableBase[index] = GetOffsetAddress((ULONGLONG)NtTerminateProcess);
 	WPONx64(irql);
 }
 
-
-VOID TitanHook(const char* apiname, void* newfunc)
-{
-	PULONG SSDTBase = NULL;
-
-	KeServiceDescriptorTable = GetKeServiceDescriptorTable64();
-	SSDTBase = KeServiceDescriptorTable->ServiceTableBase;
-#ifdef _WIN64
-	static ULONG CodeSize = 0;
-	static PVOID CodeStart = 0;
-	if (!CodeStart)
-	{
-		ULONG_PTR Lowest = SSDTBase;
-		ULONG_PTR Highest = Lowest + 0x0FFFFFFF;
-		CodeSize = 0;
-		//CodeStart = GetPageBase
-	}
-#else
-#endif
-}
 
 
 

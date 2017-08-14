@@ -13,7 +13,7 @@ Environment:
     Kernel-mode Driver Framework
 
 --*/
-
+#pragma once
 #include "public.h"
 
 EXTERN_C_START

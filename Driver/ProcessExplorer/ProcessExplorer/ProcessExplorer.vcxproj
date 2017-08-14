@@ -38,17 +38,15 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Device.c" />
     <ClCompile Include="Driver.c" />
-    <ClCompile Include="Queue.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Device.h" />
     <ClInclude Include="Driver.h" />
+    <ClInclude Include="Hooklib.h" />
     <ClInclude Include="hookssdt.h" />
     <ClInclude Include="Public.h" />
-    <ClInclude Include="Queue.h" />
     <ClInclude Include="SSDT.h" />
+    <ClInclude Include="SSDT_shadow.h" />
     <ClInclude Include="Trace.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

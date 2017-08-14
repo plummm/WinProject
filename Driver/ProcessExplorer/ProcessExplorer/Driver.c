@@ -18,6 +18,7 @@ Environment:
 #include "driver.tmh"
 #include "source.cpp"
 #include "SSDT.h"
+#include "Hooklib.h"
 //#include "hookssdt.h"
 
 #ifdef ALLOC_PRAGMA
@@ -114,7 +115,7 @@ NTSTATUS DispatchIoct(PDEVICE_OBJECT DriverObject, PIRP pIrp)
 	{
 	case IOCTL_GET_PROCESS:
 	{
-		uOutSize = EnumProcess(pIoBuffer, uOutSize);
+		uOutSize = EnumProcess((WCHAR*)pIoBuffer, uOutSize);
 		/*
 		while (i < 262144)
 		{
@@ -152,17 +153,18 @@ NTSTATUS DispatchIoct(PDEVICE_OBJECT DriverObject, PIRP pIrp)
 	}
 	case IOCTL_GET_SSDTADDR:
 	{
-		/*KeServiceDescriptorTable = GetKeServiceDescriptorTable64();
-		
-		DbgPrint("[KrnlProcExplr]SSDT: %llx", ssdt);
-		if (ssdt != 0)
-		{
-			DbgPrint("[KrnlProcExplr]NtOpenProcess: %llx", GetSSDTFunctionAddress64(0x23, ssdt));
-			DbgPrint("[KrnlProcExplr]NtTerminateProcess: %llx", GetSSDTFunctionAddress64(0x29, ssdt));
-		}*/
-		//KeServiceDescriptorTable = (PSYSTEM_SERVICE_TABLE)GetKeServiceDescriptorTable64();
-		//HookSSDT();
 		HookSSDT(0x29);
+		status = STATUS_SUCCESS;
+		break;
+	}
+	case IOCTL_UNHOOK_SSDTADDR:
+	{
+		UnhookSSDT(0x29);
+		break;
+	}
+	case IOCTL_GET_SSSDTADDR:
+	{
+		HookSSSDT(0x100f, MyNtUserPostMessage, 4);
 		status = STATUS_SUCCESS;
 		break;
 	}
@@ -189,7 +191,6 @@ VOID DriverUnload(PDRIVER_OBJECT pDriverObj)
 	RtlInitUnicodeString(&strLink, LINK_NAME);
 	IoDeleteSymbolicLink(&strLink);
 	IoDeleteDevice(pDriverObj->DeviceObject);
-	UnhookSSDT(0x29);
 }
 
 NTSTATUS
