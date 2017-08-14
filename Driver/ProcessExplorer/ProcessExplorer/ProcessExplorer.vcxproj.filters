@@ -25,22 +25,19 @@
     <ClInclude Include="Driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Public.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Trace.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SSDT.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hookssdt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SSDT_shadow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hooklib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Inline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LDE64.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

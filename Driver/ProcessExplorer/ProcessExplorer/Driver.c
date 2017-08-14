@@ -19,6 +19,7 @@ Environment:
 #include "source.cpp"
 #include "SSDT.h"
 #include "Hooklib.h"
+#include "Inline.h"
 //#include "hookssdt.h"
 
 #ifdef ALLOC_PRAGMA
@@ -113,7 +114,7 @@ NTSTATUS DispatchIoct(PDEVICE_OBJECT DriverObject, PIRP pIrp)
 	uOutSize = pIrpStack->Parameters.DeviceIoControl.OutputBufferLength;
 	switch (uIoControlCode)
 	{
-	case IOCTL_GET_PROCESS:
+	case IOCTL_GET_PROCESS:  //222000
 	{
 		uOutSize = EnumProcess((WCHAR*)pIoBuffer, uOutSize);
 		/*
@@ -136,7 +137,7 @@ NTSTATUS DispatchIoct(PDEVICE_OBJECT DriverObject, PIRP pIrp)
 		status = STATUS_SUCCESS;
 		break;
 	}
-	case IOCTL_SAY_HELLO:
+	case IOCTL_SAY_HELLO:  //222004
 	{
 		DbgPrint("Hello");
 		DbgPrint("[KrnlProcExplr]output size:%d output addr:%x\n", uOutSize, pIoBuffer);
@@ -151,20 +152,34 @@ NTSTATUS DispatchIoct(PDEVICE_OBJECT DriverObject, PIRP pIrp)
 		status = STATUS_SUCCESS;
 		break;
 	}
-	case IOCTL_GET_SSDTADDR:
+	case IOCTL_GET_SSDTADDR: //222008
 	{
 		HookSSDT(0x29);
 		status = STATUS_SUCCESS;
 		break;
 	}
-	case IOCTL_UNHOOK_SSDTADDR:
+	case IOCTL_UNHOOK_SSDTADDR:  //22200C
 	{
 		UnhookSSDT(0x29);
+		status = STATUS_SUCCESS;
 		break;
 	}
-	case IOCTL_GET_SSSDTADDR:
+	case IOCTL_GET_SSSDTADDR:  //222010
 	{
 		HookSSSDT(0x100f, MyNtUserPostMessage, 4);
+		status = STATUS_SUCCESS;
+		break;
+	}
+	case IOCTL_UNHOOK_SSSDTADDR:  //222014
+	{
+		UNHOOK_SSSDT(0x100f);
+		status = STATUS_SUCCESS;
+		break;
+	}
+	case IOCTL_INLINE_HOOK:
+	{
+		my_eprocess = (ULONG64)PsGetCurrentProcess();
+		restore_raw_code = HookKernelApi(PsLookupProcessByProcessId, Fake_PsLookupProcessByProcessId, &ori_pslp, &patch_size);
 		status = STATUS_SUCCESS;
 		break;
 	}

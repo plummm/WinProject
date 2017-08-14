@@ -43,11 +43,10 @@
   <ItemGroup>
     <ClInclude Include="Driver.h" />
     <ClInclude Include="Hooklib.h" />
-    <ClInclude Include="hookssdt.h" />
-    <ClInclude Include="Public.h" />
+    <ClInclude Include="Inline.h" />
+    <ClInclude Include="LDE64.h" />
     <ClInclude Include="SSDT.h" />
     <ClInclude Include="SSDT_shadow.h" />
-    <ClInclude Include="Trace.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9BFA8344-AED3-4C35-B3B2-C088AC406AF5}</ProjectGuid>

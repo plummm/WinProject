@@ -186,7 +186,7 @@ ULONG64 FindFreeSpace(ULONG64 StartAddress, ULONG64 Length)
 	return 0;
 }
 
-VOID ModifySSSDT(ULONG64 Index, ULONG64 Address, CHAR ParamCount)
+VOID ModifySSSDT(ULONG64 Index, ULONG64 Address)
 {
 	CHAR b = 0, bits[4] = { 0 };
 	LONG i;
@@ -305,13 +305,13 @@ VOID HookSSSDT(ULONGLONG index, ULONG64 fake_func, CHAR ParamCount)
 	NtUserQueryWindow = sssdt_userquerywindow;
 	NtUserPostMessage = sssdt_old;
 	FreeSpace = GetCaveHook(fake_func);
-	ModifySSSDT(index, FreeSpace, ParamCount);
+	ModifySSSDT(index, FreeSpace);
 	DbgPrint("SSSDT Hook Successfully!");
 }
 
-VOID UNHOOK_SSSDT(ULONG64 index, ULONG OriFunctionAddress, CHAR ParamCount)
+VOID UNHOOK_SSSDT(ULONG64 index)
 {
-	ModifySSSDT(index, (ULONG64)OriFunctionAddress, ParamCount);
+	ModifySSSDT(index, (ULONG64)sssdt_old);
 	DbgPrint("UNHOOK_SSSDT successfully");
 }
 
