@@ -176,10 +176,16 @@ NTSTATUS DispatchIoct(PDEVICE_OBJECT DriverObject, PIRP pIrp)
 		status = STATUS_SUCCESS;
 		break;
 	}
-	case IOCTL_INLINE_HOOK:
+	case IOCTL_INLINE_HOOK:  //222018
 	{
 		my_eprocess = (ULONG64)PsGetCurrentProcess();
 		restore_raw_code = HookKernelApi(PsLookupProcessByProcessId, Fake_PsLookupProcessByProcessId, &ori_pslp, &patch_size);
+		status = STATUS_SUCCESS;
+		break;
+	}
+	case IOCTL_INLINE_UNHOOK:  //22201C
+	{
+		UnhookKernelApi(PsLookupProcessByProcessId, restore_raw_code, &patch_size);
 		status = STATUS_SUCCESS;
 		break;
 	}
