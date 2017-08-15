@@ -21,6 +21,7 @@ Environment:
 #include "Hooklib.h"
 #include "Inline.h"
 #include "Process.h"
+#include "module.h"
 //#include "hookssdt.h"
 
 #ifdef ALLOC_PRAGMA
@@ -144,6 +145,23 @@ NTSTATUS DispatchIoct(PDEVICE_OBJECT DriverObject, PIRP pIrp)
 	case IOCTL_MONITOR_PROCESS: //222020
 	{
 		status = PsSetCreateProcessNotifyRoutineEx(SetCreateProcessNotifyRoutineEx, FALSE);
+		break;
+	}
+	case IOCTL_DETACH_MONITOR_PROCESS: //222024
+	{
+		status = PsSetCreateProcessNotifyRoutineEx(SetCreateProcessNotifyRoutineEx, TRUE);
+		break;
+	}
+	case IOCTL_MONITOR_MODULE:  //222028
+	{
+		block_list = "win64ast.dll";
+		status = PsSetLoadImageNotifyRoutine(SetLoadImageNotifyRoutine);
+		break;
+	}
+	case IOCTL_DETACH_MONITOR_MODULE:  //22202C
+	{
+		block_list = "";
+		status = STATUS_SUCCESS;
 		break;
 	}
 	default:

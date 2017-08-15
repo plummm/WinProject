@@ -83,7 +83,7 @@ void SetCreateProcessNotifyRoutineEx(
 		strcpy_s(xxx, MAX_PATH, PsGetProcessImageFileName(ParentId));
 		if (!_stricmp(xxx, "calc.exe"))
 		{
-			DbgPrint("Create process denied!");
+			DbgPrint("Creating process denied!");
 			CreateInfo->CreationStatus = STATUS_UNSUCCESSFUL;
 		}
 	}
