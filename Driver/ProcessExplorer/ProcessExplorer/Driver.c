@@ -20,6 +20,7 @@ Environment:
 #include "SSDT.h"
 #include "Hooklib.h"
 #include "Inline.h"
+#include "Process.h"
 //#include "hookssdt.h"
 
 #ifdef ALLOC_PRAGMA
@@ -28,55 +29,6 @@ Environment:
 #pragma alloc_text (PAGE, ProcessExplorerEvtDriverContextCleanup)
 #endif
 
-printList *head = NULL, *tail = NULL;
-
-
-PEPROCESS LookupProcess(HANDLE Pid)
-{
-	PEPROCESS eprocess = NULL;
-	if (NT_SUCCESS(PsLookupProcessByProcessId(Pid, &eprocess)))
-		return eprocess;
-	else
-		return NULL;
-}
-
-DWORD EnumProcess(WCHAR* printBuffer, DWORD printSize)
-{
-	ULONG i = 0;
-	PEPROCESS eproc = NULL;
-	WCHAR *temp1, *temp2;
-	DWORD sum_buffer = 0;
-	int wcount = 0;
-
-	if (printSize!=0)
-		wcount = printSize / sizeof(WCHAR);
-
-	temp1 = (WCHAR*)ExAllocatePool(PagedPool, MAX_BUFFER);
-	temp2 = (WCHAR*)ExAllocatePool(PagedPool, printSize);
-	RtlFillMemory(temp1, MAX_BUFFER, 0);
-	RtlFillMemory(temp2, printSize, 0);
-	for (i = 1; i < 262144; i += 4)
-	{
-		eproc = LookupProcess((HANDLE)i);
-		if (eproc != NULL)
-		{
-			RtlStringCchPrintfW(temp1, MAX_BUFFER/sizeof(WCHAR), L"EPROCESS=%p, PID=%d, PPID=%ld, Name=%s\n",
-				eproc,
-				(DWORD)PsGetProcessId(eproc),
-				(DWORD)PsGetProcessInheritedFromUniqueProcessId(eproc),
-				PsGetProcessImageFileName(eproc));
-			sum_buffer += wcslen(temp1) * sizeof(WCHAR);
-
-			RtlStringCchPrintfW(printBuffer, wcount, L"%s%s",
-				temp2,
-				temp1);
-			
-			RtlMoveMemory(temp2, printBuffer, printSize);
-			ObDereferenceObject(eproc);
-		}
-	}
-	return sum_buffer;
-}
 
 NTSTATUS DispatchCreate(PDEVICE_OBJECT DriverObject, PIRP pIrp)
 {
@@ -187,6 +139,11 @@ NTSTATUS DispatchIoct(PDEVICE_OBJECT DriverObject, PIRP pIrp)
 	{
 		UnhookKernelApi(PsLookupProcessByProcessId, restore_raw_code, &patch_size);
 		status = STATUS_SUCCESS;
+		break;
+	}
+	case IOCTL_MONITOR_PROCESS: //222020
+	{
+		status = PsSetCreateProcessNotifyRoutineEx(SetCreateProcessNotifyRoutineEx, FALSE);
 		break;
 	}
 	default:

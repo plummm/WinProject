@@ -45,6 +45,7 @@
     <ClInclude Include="Hooklib.h" />
     <ClInclude Include="Inline.h" />
     <ClInclude Include="LDE64.h" />
+    <ClInclude Include="Process.h" />
     <ClInclude Include="SSDT.h" />
     <ClInclude Include="SSDT_shadow.h" />
   </ItemGroup>
@@ -182,6 +183,7 @@
     </ClCompile>
     <Link>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
+      <AdditionalOptions>/INTEGRITYCHECK %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

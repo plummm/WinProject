@@ -40,6 +40,9 @@
     <ClInclude Include="LDE64.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Process.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Driver.c">
