@@ -16,3 +16,7 @@
 
 详细用法请在命令行敲击
 `.\SCMDriverLoader.exe -h`
+
+### FileManger
+
+禁止修改，删除目标文件【flag.txt】
