@@ -9,7 +9,8 @@
 
 #include <stdio.h>
 #include <tchar.h>
-
+#include <string.h>
+#include <iostream>
 
 
 // TODO:  在此处引用程序需要的其他头文件

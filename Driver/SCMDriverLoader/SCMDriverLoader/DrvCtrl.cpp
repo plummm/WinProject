@@ -1,6 +1,17 @@
 #include "stdafx.h"
 #include "DrvCtrl.h"
 
+
+WCHAR* cs(WCHAR* str1, WCHAR* str2)
+{
+	SIZE_T len1 = wcslen(str1), len2 = wcslen(str2);
+	SIZE_T newstrlen = len1 + len2 + 1;
+	WCHAR* newstr = (WCHAR*)malloc(newstrlen * 2);
+	memcpy_s(newstr, newstrlen * 2, str1, len1);
+	memcpy_s(newstr + len1, newstrlen * 2 - len1, str2, len2 + 1);
+	return newstr;
+}
+
 void DrvCtrl::PrintError()
 {
 	m_dwLastError = GetLastError();
@@ -16,7 +27,6 @@ DrvCtrl::DrvCtrl()
 	m_hService = NULL;
 	m_hDriver = NULL;
 }
-
 
 DrvCtrl::~DrvCtrl()
 {
@@ -137,6 +147,33 @@ BOOL DrvCtrl::IoControl(DWORD dwIoCode, PVOID InBuff, DWORD InBufferLen,
 	}
 	_tprintf(L"Output Size:%d %p\n", dw, OutBuff);
 	return 1;
+}
+
+BOOL DrvCtrl::LoadWdmInf(WCHAR *inf, WCHAR* szDrvSvcName)
+{
+	WCHAR exe[] = L"c:\\windows\\system32\\InfDefaultInstall.exe ";
+	STARTUPINFOW si = { 0 };
+	PROCESS_INFORMATION pi = { 0 };
+
+	WCHAR *cmd = cs(exe, inf);
+	if (!CreateProcessW(NULL, cmd, NULL, NULL, 0, 0, NULL, NULL, &si, &pi))
+		return FALSE;
+	WaitForSingleObject(pi.hProcess, INFINITE);
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
+	SC_HANDLE hSCM = OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+	SC_HANDLE hSvcHandle = OpenServiceW(hSCM, szDrvSvcName, SERVICE_ALL_ACCESS);
+	if (hSvcHandle)
+	{
+		CloseServiceHandle(hSCM);
+		CloseServiceHandle(hSvcHandle);
+		return TRUE;
+	}
+	else
+	{
+		CloseServiceHandle(hSCM);
+		return FALSE;
+	}
 }
 
 BOOL DrvCtrl::Open(PWCHAR pLinkName)

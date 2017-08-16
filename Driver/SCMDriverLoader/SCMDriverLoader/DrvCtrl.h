@@ -21,6 +21,7 @@ public:
 	DWORD CTL_CODE_GEN(DWORD lngFunction);
 	BOOL GetSvcHandle(PWCHAR pServiceName);
 	BOOL Install(PWCHAR pSysPath, PWCHAR pServiceName, PWCHAR pDisplayName);
+	BOOL LoadWdmInf(WCHAR *inf, WCHAR* szDrvSvcName);
 	BOOL Uninstall(PWCHAR pSysPath, PWCHAR pServiceName);
 	void PrintError();
 	BOOL Start();
