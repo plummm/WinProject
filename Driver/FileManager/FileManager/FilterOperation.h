@@ -3,6 +3,8 @@
 #include <dontuse.h>
 #include <suppress.h>
 
+NTKERNELAPI UCHAR* PsGetProcessImageFileName(IN PEPROCESS Process);
+
 FLT_PREOP_CALLBACK_STATUS
 FileManagerPreCreate(
 	_Inout_ PFLT_CALLBACK_DATA Data,
