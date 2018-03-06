@@ -75,8 +75,8 @@
     <Compile Include="Model\CommandModel.cs" />
     <Compile Include="Model\SlaveMonitorModel.cs" />
     <Compile Include="Model\ViewModel.cs" />
-    <Compile Include="CredentialsWindow.xaml.cs">
-      <DependentUpon>CredentialsWindow.xaml</DependentUpon>
+    <Compile Include="TasksWindow.xaml.cs">
+      <DependentUpon>TasksWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WebcamWindow.xaml.cs">
       <DependentUpon>WebcamWindow.xaml</DependentUpon>
@@ -106,7 +106,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="CredentialsWindow.xaml">
+    <Page Include="TasksWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -249,8 +249,8 @@ namespace BlackHole.Master
             window.Show();
         }
 
-        private void OpenCredentialsWindow(object sender, RoutedEventArgs e) =>
-            OpenSlaveWindowIfSelected(slave => new CredentialsWindow(slave));
+        private void OpenTasksListWindow(object sender, RoutedEventArgs e) =>
+            OpenSlaveWindowIfSelected(slave => new TasksWindow(slave));
 
         private void OpenWebcamWindow(object sender, RoutedEventArgs e) =>
             OpenSlaveWindowIfSelected(slave => new WebcamWindow(slave));

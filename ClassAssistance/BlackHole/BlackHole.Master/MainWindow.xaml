@@ -25,7 +25,7 @@
                     <ContextMenu>
                         <MenuItem Header="File Manager" Click="OpenFileManager" Icon="{StaticResource FileManagerIcon}" />
                         <MenuItem Header="Remote Desktop" Click="OpenRemoteDesktop" Icon="{StaticResource RemoteDesktopIcon}" />
-                        <MenuItem Header="Credentials" Click="OpenCredentialsWindow" />
+                        <MenuItem Header="TasksManager" Click="OpenTasksListWindow" />
                         <MenuItem Header="Webcam" Click="OpenWebcamWindow" />
                     </ContextMenu>
                 </ListView.ContextMenu>

