@@ -27,6 +27,10 @@
                         <MenuItem Header="Remote Desktop" Click="OpenRemoteDesktop" Icon="{StaticResource RemoteDesktopIcon}" />
                         <MenuItem Header="TasksManager" Click="OpenTasksListWindow" Icon="{StaticResource TasksManagerIcon}"/>
                         <MenuItem Header="Webcam" Click="OpenWebcamWindow" Icon="{StaticResource WebcamIcon}"/>
+                        <MenuItem Header="Schedule" Icon="{StaticResource ScheduleIcon}">
+                            <MenuItem Header="Shutdown" Click="ShutdownRemote" Icon="{StaticResource ShutdownRemoteIcon}"/>
+                            <MenuItem Header="Reboot" Click="RebootRemote" Icon="{StaticResource RebootRemoteIcon}"/>
+                        </MenuItem>
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>

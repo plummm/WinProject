@@ -69,6 +69,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DelayTimeWindow.xaml.cs">
+      <DependentUpon>DelayTimeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FileManagerWindow.xaml.cs">
       <DependentUpon>FileManagerWindow.xaml</DependentUpon>
     </Compile>
@@ -90,6 +93,10 @@
     <Compile Include="Model\ViewModelCollection.cs" />
     <Compile Include="SlaveWindow.cs" />
     <Compile Include="Extentions\WindowExtensions.cs" />
+    <Page Include="DelayTimeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FileManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

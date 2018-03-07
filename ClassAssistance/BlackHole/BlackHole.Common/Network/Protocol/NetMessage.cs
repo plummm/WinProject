@@ -202,6 +202,17 @@ namespace BlackHole.Common.Network.Protocol
         public string PID { get; set; }
     }
 
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+    public sealed class ShutdownRemoteMessage : NetMessage
+    {
+        public string DelayTime { get; set; }
+    }
+
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+    public sealed class RebootRemoteMessage : NetMessage
+    {
+        public string DelayTime { get; set; }
+    }
 
     // ====================================
     // ================= Data =============
@@ -240,6 +251,8 @@ namespace BlackHole.Common.Network.Protocol
         public string Size { get; set; }
     }
 
+    [ProtoInclude(1027, typeof(RebootRemoteMessage))]
+    [ProtoInclude(1025, typeof(ShutdownRemoteMessage))]
     [ProtoInclude(1024, typeof(KillProcessMessage))]
     [ProtoInclude(1023, typeof(StopTasksMessage))]
     [ProtoInclude(1022, typeof(WebcamCaptureMessage))]

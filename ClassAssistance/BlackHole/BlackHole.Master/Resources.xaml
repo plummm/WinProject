@@ -5,6 +5,9 @@
     <Image x:Key="RemoteDesktopIcon" Source="Resources/icons/light/appbar.eye.png" Width="20" Height="20" />
     <Image x:Key="TasksManagerIcon" Source="Resources/icons/light/appbar.hardware.cpu.png" Width="20" Height="20" />
     <Image x:Key="WebcamIcon" Source="Resources/icons/light/appbar.camera.png" Width="20" Height="20" />
+    <Image x:Key="ScheduleIcon" Source="Resources/icons/light/appbar.timer.rewind.png" Width="20" Height="20" />
+    <Image x:Key="ShutdownRemoteIcon" Source="Resources/icons/light/appbar.checkmark.cross.png" Width="20" Height="20" />
+    <Image x:Key="RebootRemoteIcon" Source="Resources/icons/light/appbar.vector.circle.png" Width="20" Height="20" />
 
     <Image x:Key="ExecuteFileIcon" Source="Resources/icons/light/appbar.camera.flash.png" Width="20" Height="20" />
     <Image x:Key="DownloadFileIcon" Source="Resources/icons/light/appbar.download.png" Width="20" Height="20" />
