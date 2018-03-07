@@ -15,7 +15,7 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Id" Width="100" DisplayMemberBinding="{Binding Id}" />
-                        <GridViewColumn Header="Ip" Width="100" DisplayMemberBinding="{Binding Ip}" />
+                        <GridViewColumn Header="IP" Width="100" DisplayMemberBinding="{Binding Ip}" />
                         <GridViewColumn Header="OperatingSystem" Width="300" DisplayMemberBinding="{Binding OperatingSystem}" />
                         <GridViewColumn Header="MachineName" Width="150" DisplayMemberBinding="{Binding MachineName}" />
                         <GridViewColumn Header="UserName" Width="150" DisplayMemberBinding="{Binding UserName}" />
@@ -25,8 +25,8 @@
                     <ContextMenu>
                         <MenuItem Header="File Manager" Click="OpenFileManager" Icon="{StaticResource FileManagerIcon}" />
                         <MenuItem Header="Remote Desktop" Click="OpenRemoteDesktop" Icon="{StaticResource RemoteDesktopIcon}" />
-                        <MenuItem Header="TasksManager" Click="OpenTasksListWindow" />
-                        <MenuItem Header="Webcam" Click="OpenWebcamWindow" />
+                        <MenuItem Header="TasksManager" Click="OpenTasksListWindow" Icon="{StaticResource TasksManagerIcon}"/>
+                        <MenuItem Header="Webcam" Click="OpenWebcamWindow" Icon="{StaticResource WebcamIcon}"/>
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>

@@ -12,6 +12,7 @@ namespace BlackHole.Slave.Malicious
 {
     public sealed class TaskManager : Singleton<TaskManager>, IMalicious
     {
+        public static Process[] processlist;
         public void Initialize()
         {
             //GetTasksList();
@@ -19,7 +20,7 @@ namespace BlackHole.Slave.Malicious
 
         public static Dictionary<string, string>[] GetTasksList(Dictionary<string, List<PerformanceCounter>> taskInfo)
         {
-            Process[] processlist = Process.GetProcesses();
+            processlist = Process.GetProcesses();
             var counters = new List<PerformanceCounter>();
             List<Dictionary<string, string>> taskslist = new List<Dictionary<string, string>>();
 
@@ -41,6 +42,7 @@ namespace BlackHole.Slave.Malicious
                 taskslist.Add(new Dictionary<string, string>
                 {
                     ["TaskName"] = theprocess.ProcessName,
+                    ["PID"] = theprocess.Id.ToString(),
                     ["CPU"] = Math.Round(cpu, 2).ToString() + " %",
                     ["Memory"] = Math.Round((ram / 1024 / 1024), 2).ToString() + " MB",
                     ["Network"] = Math.Round((rbs / 1024), 2).ToString() + " kb/s"

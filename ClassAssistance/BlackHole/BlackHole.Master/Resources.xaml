@@ -3,6 +3,8 @@
                     xmlns:local="clr-namespace:BlackHole.Master">
     <Image x:Key="FileManagerIcon" Source="Resources/icons/light/appbar.cabinet.files.variant.png" Width="20" Height="20" />
     <Image x:Key="RemoteDesktopIcon" Source="Resources/icons/light/appbar.eye.png" Width="20" Height="20" />
+    <Image x:Key="TasksManagerIcon" Source="Resources/icons/light/appbar.hardware.cpu.png" Width="20" Height="20" />
+    <Image x:Key="WebcamIcon" Source="Resources/icons/light/appbar.camera.png" Width="20" Height="20" />
 
     <Image x:Key="ExecuteFileIcon" Source="Resources/icons/light/appbar.camera.flash.png" Width="20" Height="20" />
     <Image x:Key="DownloadFileIcon" Source="Resources/icons/light/appbar.download.png" Width="20" Height="20" />

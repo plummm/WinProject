@@ -15,15 +15,21 @@
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="1" Header="TasksList"  Margin="10">
             <Grid>
-                <ListView x:Name="TasksList" ItemsSource="{Binding Items}"  Margin="10,10,10,9.5" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListView x:Name="TasksList" ItemsSource="{Binding Items}"  Margin="10,10,31,9.5" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionMode="Single">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="TaskName" Width="200" DisplayMemberBinding="{Binding Path=[TaskName]}" />
+                            <GridViewColumn Header="PID" Width="100" DisplayMemberBinding="{Binding Path=[PID]}" />
                             <GridViewColumn Header="CPU" Width="200" DisplayMemberBinding="{Binding Path=[CPU]}" />
                             <GridViewColumn Header="Memory" Width="200" DisplayMemberBinding="{Binding Path=[Memory]}" />
                             <GridViewColumn Header="Network" Width="200" DisplayMemberBinding="{Binding Path=[Network]}" />
                         </GridView>
                     </ListView.View>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Kill Process" Click="KillProcess" />
+                        </ContextMenu>
+                    </ListView.ContextMenu>
                 </ListView>
             </Grid>
         </GroupBox>

