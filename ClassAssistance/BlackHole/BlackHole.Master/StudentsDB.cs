@@ -10,7 +10,7 @@ namespace BlackHole.Master
 {
     class StudentsDB
     {
-        public SQLiteConnection m_dbConnection;
+        public static SQLiteConnection m_dbConnection;
         public StudentsDB()
         {
             CreateStudentsDB();
@@ -38,14 +38,14 @@ namespace BlackHole.Master
             
         }
 
-        public int QueryStuidAndPassword(string stuId, string password)
+        public static int QueryStuidAndPassword(string stuId, string password)
         {
             string sql = "SELECT EXISTS ( SELECT* FROM studentsInfo WHERE studentId = "
                 + stuId + " AND password = '"
                 + password + "')";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            var result = command.ExecuteScalar();
-            return (int)result;
+            int result = Convert.ToInt32(command.ExecuteScalar());
+            return result;
         }
 
         public void CloseStudentsDB()

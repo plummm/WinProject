@@ -215,12 +215,6 @@ namespace BlackHole.Common.Network.Protocol
     }
 
     [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-    public sealed class GetPriceMessage : NetMessage
-    {
-        public int Price { get; set; }
-    }
-
-    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public sealed class LoginMessage : NetMessage
     {
         public string stuid { get; set; }
@@ -230,7 +224,7 @@ namespace BlackHole.Common.Network.Protocol
     [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
     public sealed class LoginSuccessMessage : NetMessage
     {
-        
+        public double Price { get; set; }
     }
 
     [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
@@ -279,7 +273,6 @@ namespace BlackHole.Common.Network.Protocol
     [ProtoInclude(1031, typeof(LoginFailMessage))]
     [ProtoInclude(1030, typeof(LoginSuccessMessage))]
     [ProtoInclude(1029, typeof(LoginMessage))]
-    [ProtoInclude(1028, typeof(GetPriceMessage))]
     [ProtoInclude(1027, typeof(RebootRemoteMessage))]
     [ProtoInclude(1025, typeof(ShutdownRemoteMessage))]
     [ProtoInclude(1024, typeof(KillProcessMessage))]

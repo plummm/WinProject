@@ -81,6 +81,7 @@ namespace BlackHole.Master
 
             AddInfoMessage("NetworkService running...");
             StudentsDB db = new StudentsDB();
+            
         }
 
         /// <summary>
