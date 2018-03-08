@@ -214,6 +214,31 @@ namespace BlackHole.Common.Network.Protocol
         public string DelayTime { get; set; }
     }
 
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+    public sealed class GetPriceMessage : NetMessage
+    {
+        public int Price { get; set; }
+    }
+
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+    public sealed class LoginMessage : NetMessage
+    {
+        public string stuid { get; set; }
+        public string password { get; set; }
+    }
+
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+    public sealed class LoginSuccessMessage : NetMessage
+    {
+        
+    }
+
+    [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+    public sealed class LoginFailMessage : NetMessage
+    {
+
+    }
+
     // ====================================
     // ================= Data =============
     // ====================================
@@ -251,6 +276,10 @@ namespace BlackHole.Common.Network.Protocol
         public string Size { get; set; }
     }
 
+    [ProtoInclude(1031, typeof(LoginFailMessage))]
+    [ProtoInclude(1030, typeof(LoginSuccessMessage))]
+    [ProtoInclude(1029, typeof(LoginMessage))]
+    [ProtoInclude(1028, typeof(GetPriceMessage))]
     [ProtoInclude(1027, typeof(RebootRemoteMessage))]
     [ProtoInclude(1025, typeof(ShutdownRemoteMessage))]
     [ProtoInclude(1024, typeof(KillProcessMessage))]
