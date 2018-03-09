@@ -12,6 +12,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackHole.Slave", "BlackHol
 		{8D0EC007-217B-4AFD-8374-18192DC783EE} = {8D0EC007-217B-4AFD-8374-18192DC783EE}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deamon", "Deamon\Deamon.csproj", "{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8D0EC007-217B-4AFD-8374-18192DC783EE} = {8D0EC007-217B-4AFD-8374-18192DC783EE}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +35,10 @@ Global
 		{0948AC38-EF21-4169-963C-1EDF8D706C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0948AC38-EF21-4169-963C-1EDF8D706C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0948AC38-EF21-4169-963C-1EDF8D706C23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

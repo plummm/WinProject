@@ -505,7 +505,8 @@ namespace BlackHole.Slave
 
         private void LoginSuccess(LoginSuccessMessage message)
         {
-            CancelLoginProtect();
+            LoginProtect.TimeStop();
+            App.Current.MainWindow.Hide();
         }
 
         private void LoginFail(LoginFailMessage message)
