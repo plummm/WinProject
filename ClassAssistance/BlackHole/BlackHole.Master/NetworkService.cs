@@ -44,12 +44,14 @@ namespace BlackHole.Master
             m_server.Bind("tcp://*:" + ListnenPort);
             m_server.ReceiveReady += Server_ReceiveReady;
             m_server.SendReady += Server_SendReady;
+            m_started = true;
             new Thread(() =>
             {
                 long nextSend = 0, nextHeartBeat = 0;
-                while (true)
+                while (m_started)
                 {
-                    m_server.Poll(TimeSpan.FromMilliseconds(1));
+                    var tmp = TimeSpan.FromMilliseconds(1);
+                    m_server.Poll(tmp);
                     if (nextSend <= 0)
                     {
                         SendQueue();
@@ -65,7 +67,6 @@ namespace BlackHole.Master
                     Thread.Sleep(10);
                 }
             }) { IsBackground = true }.Start();
-            m_started = true;
         }
         
         /// <summary>
@@ -75,8 +76,10 @@ namespace BlackHole.Master
         {
             if (m_started)
             {
-                m_poller.Dispose();
-                m_server.Dispose();
+                if (m_poller != null)
+                    m_poller.Dispose();
+                if (m_server != null)
+                    m_server.Dispose();
                 m_started = false;
             }
         }
@@ -193,7 +196,21 @@ namespace BlackHole.Master
                             if (ev.Source.Initialize(m.Ip, m.OperatingSystem, m.MachineName, m.UserName))
                                 FireSlaveConnected(ev.Source);
                         })
-                        .With<PongMessage>(m => ev.Source.DecrementPingTimeout());
+                        .With<PongMessage>(m => ev.Source.DecrementPingTimeout())
+                        .With<LoginMessage>(m =>
+                        {
+                            if (StudentsDB.QueryStuidAndPassword(m.stuid, m.password) == 1)
+                            {
+                                ev.Source.Send(new LoginSuccessMessage
+                                {
+                                    Price = 0.05
+                                });
+                            }
+                            else
+                            {
+                                ev.Source.Send(new LoginFailMessage());
+                            }
+                        });
                     break;
                 }
             }

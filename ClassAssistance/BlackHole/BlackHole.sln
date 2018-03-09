@@ -1,13 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackHole.Slave", "BlackHole.Slave\BlackHole.Slave.csproj", "{F453212F-5B9B-4F8F-A8B9-28BEF55F0933}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackHole.Master", "BlackHole.Master\BlackHole.Master.csproj", "{A0AA13C9-5972-4651-8700-80EEA510567A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackHole.Common", "BlackHole.Common\BlackHole.Common.csproj", "{8D0EC007-217B-4AFD-8374-18192DC783EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackHole.Slave", "BlackHole.Slave\BlackHole.Slave.csproj", "{0948AC38-EF21-4169-963C-1EDF8D706C23}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8D0EC007-217B-4AFD-8374-18192DC783EE} = {8D0EC007-217B-4AFD-8374-18192DC783EE}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deamon", "Deamon\Deamon.csproj", "{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8D0EC007-217B-4AFD-8374-18192DC783EE} = {8D0EC007-217B-4AFD-8374-18192DC783EE}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F453212F-5B9B-4F8F-A8B9-28BEF55F0933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F453212F-5B9B-4F8F-A8B9-28BEF55F0933}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F453212F-5B9B-4F8F-A8B9-28BEF55F0933}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F453212F-5B9B-4F8F-A8B9-28BEF55F0933}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0AA13C9-5972-4651-8700-80EEA510567A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A0AA13C9-5972-4651-8700-80EEA510567A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0AA13C9-5972-4651-8700-80EEA510567A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,8 +31,19 @@ Global
 		{8D0EC007-217B-4AFD-8374-18192DC783EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D0EC007-217B-4AFD-8374-18192DC783EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D0EC007-217B-4AFD-8374-18192DC783EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0948AC38-EF21-4169-963C-1EDF8D706C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0948AC38-EF21-4169-963C-1EDF8D706C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0948AC38-EF21-4169-963C-1EDF8D706C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0948AC38-EF21-4169-963C-1EDF8D706C23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E14C8D0C-3E05-4A1D-B5C7-1E86A71D4D3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2476B3BF-E650-4DAA-B1EA-CB9821033C86}
 	EndGlobalSection
 EndGlobal

