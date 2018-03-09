@@ -26,7 +26,7 @@ int _tmain(int argc, TCHAR *argv[])
 
 	if (argc < 4)
 	{
-		_tprintf(L"USAGE: SCMDriverLoader.exe driver_type [operator] example.sys [CTL_CODE] [Input]\n");
+		_tprintf(L"USAGE: SCMDriverLoader.exe driver_type [operator] c:/example.sys [CTL_CODE] [Input]\n");
 		_tprintf(L"   NT    -start      load an nt driver\n");
 		_tprintf(L"   WDM   -stop       unload an wdm driver\n");
 		return 0;
@@ -40,6 +40,7 @@ int _tmain(int argc, TCHAR *argv[])
 	{
 		if (lstrcmpW(L"-start", argv[OPERATOR]) == 0)
 		{
+			
 			b = dc.Install(szSysFile, p, p);
 			_tprintf(L"%d=LoadDriver\n", b);
 			b = dc.Start();
