@@ -7,7 +7,7 @@ using System.Windows;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using BlackHole.Common;
+using ClassAssistance.Common;
 
 namespace Deamon
 {
@@ -36,7 +36,7 @@ namespace Deamon
 
         private bool CheckClassAssistance()
         {
-            Process[] classAssistance = Process.GetProcessesByName("BlackHole.Slave");
+            Process[] classAssistance = Process.GetProcessesByName("ClassAssistance.Slave");
             if (classAssistance.Count() == 1)
             {
                 return true;
