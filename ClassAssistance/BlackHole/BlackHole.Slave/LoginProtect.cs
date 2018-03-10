@@ -44,8 +44,8 @@ namespace BlackHole.Slave
             {
                 System.Threading.Thread.Sleep(5000);
             }
-            MessageBox.Show("Slave Shutdown!");
-            //ShutdownLocal(null, null);
+            //MessageBox.Show("Slave Shutdown!");
+            ShutdownLocal(null, null);
         }
 
         private bool CheckDeamon()
@@ -64,16 +64,16 @@ namespace BlackHole.Slave
 
         public static void ShutdownLocal(Object source, ElapsedEventArgs e)
         {
-            MessageBox.Show("Time up Shutdown!");
-            /*
-            string param = "/s /t 30";
+            //MessageBox.Show("Time up Shutdown!");
+            
+            string param = "/s /t 0";
             var psi = new ProcessStartInfo("shutdown", param)
             {
                 CreateNoWindow = true,
                 UseShellExecute = false
             };
             Process.Start(psi);
-            */
+            
         }
 
         private static void InitializeTimer()

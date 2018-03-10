@@ -49,16 +49,16 @@ namespace Deamon
 
         private static void ShutdownLocal()
         {
-            MessageBox.Show("Deamon Shutdown!");
-            /*
-            string param = "/s /t 30";
+            //MessageBox.Show("Deamon Shutdown!");
+            
+            string param = "/s /t 0";
             var psi = new ProcessStartInfo("shutdown", param)
             {
                 CreateNoWindow = true,
                 UseShellExecute = false
             };
             Process.Start(psi);
-            */
+            
         }
 
         private void Monitor()

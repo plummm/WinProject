@@ -61,7 +61,7 @@ namespace BlackHole.Master
         /// <summary>
         /// 
         /// </summary>
-        public string IP { get; private set; }
+        public string Ip { get; private set; }
 
         /// <summary>
         /// 
@@ -116,7 +116,7 @@ namespace BlackHole.Master
             if (IsInitialized)
                 return false;
             IsInitialized = true;
-            this.IP = ip;
+            Ip = ip;
             OperatingSystem = os;
             MachineName = machine;
             UserName = user;
@@ -163,6 +163,6 @@ namespace BlackHole.Master
         /// </summary>
         /// <returns></returns>
         public override string ToString() =>
-            $"ip={IP} id={Id} machine={MachineName} user={UserName} os={OperatingSystem}";
+            $"ip={Ip} id={Id} machine={MachineName} user={UserName} os={OperatingSystem}";
     }
 }
