@@ -1,17 +1,25 @@
 #pragma once
 #include "stdafx.h"
 
+typedef struct dllData {
+	LPWSTR szLibName;
+	wchar_t** funcNames;
+	int count;
+} DllData, *pDllData;
+
 class PE_Reader
 {
 public:
-	PE_Reader();
+	PE_Reader(wchar_t* path);
 	~PE_Reader();
 	void PEchecker();
-	void read(LPVOID buffer, DWORD length);
-	void run();
+	void Read(LPVOID buffer, DWORD length);
+	void Run();
 	DWORD Rva2Offset(DWORD rva, PIMAGE_SECTION_HEADER psh, PIMAGE_NT_HEADERS pnt);
-	void setPoint(HANDLE hFile, LONG lDistanceToMove);
-	
+	void SetPoint(HANDLE hFile, LONG lDistanceToMove);
+	pDllData RetriveDll(int index);
+	void Print(pDllData dll);
+	PVOID MultiByte2WideChar(LPSTR multiByte);
 
 private:
 	HANDLE fileHandle, hMod;
@@ -20,9 +28,10 @@ private:
 	LPCTSTR fileName;
 	PIMAGE_DOS_HEADER pfileDosHeader;
 	PIMAGE_NT_HEADERS pfileNtHeaders;
-	PIMAGE_IMPORT_DESCRIPTOR pfileImport;
+	IMAGE_IMPORT_DESCRIPTOR *pfileImport;
 	PIMAGE_SECTION_HEADER pfileSection;
 	PIMAGE_THUNK_DATA pfileThunk;
+	PIMAGE_IMPORT_BY_NAME pImportName;
 	LPDWORD fileNum;
 
 };

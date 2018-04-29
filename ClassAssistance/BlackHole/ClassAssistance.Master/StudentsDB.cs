@@ -60,7 +60,7 @@ namespace ClassAssistance.Master
             command.ExecuteNonQuery();
 
             string stu1 = "insert into studentsInfo (studentId, password) values (2018060103010, 'abcdefg')";
-            string stu2 = "insert into studentsInfo (studentId, password) values (2018060205021, 'qwerty123')";
+            string stu2 = "insert into studentsInfo (studentId, password) values (2014060203004, 'qwerty')";
             command = new SQLiteCommand(stu1, m_dbConnection);
             command.ExecuteNonQuery();
             command = new SQLiteCommand(stu2, m_dbConnection);
