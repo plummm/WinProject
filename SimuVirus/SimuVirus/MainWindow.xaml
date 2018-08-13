@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimuVirus"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="病毒模拟器" Height="350" Width="525">
     <Grid>
         <Button Content="设置开机启动" 
                 x:Name="Startup" 
@@ -17,6 +17,18 @@
                 x:Name="InfectPE" 
                 Click="Infect_PE" 
                 Margin="320,30,50,240" 
+                FontSize="20"/>
+
+        <Button Content="隐藏进程" 
+                x:Name="HideProcess" 
+                Click="Hide_Process" 
+                Margin="50,136,320,133.5" 
+                FontSize="20"/>
+
+        <Button Content="获取键盘输入" 
+                x:Name="GetKeyboardInput" 
+                Click="Get_KeyboardInput" 
+                Margin="320,136,50,133.5" 
                 FontSize="20"/>
     </Grid>
 </Window>
