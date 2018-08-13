@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Threading;
+using SimuVirus.deploy;
 
 namespace SimuVirus.tools
 {
@@ -17,6 +19,8 @@ namespace SimuVirus.tools
         public api.IMAGE_SECTION_HEADER[] imageSectionHeaders;
         public uint addressOfEntryPoint;
         public ulong imageBase;
+        private FileStream stream;
+        private string filePath;
 
         public static T FromBinaryReader<T>(BinaryReader reader)
         {
@@ -32,6 +36,7 @@ namespace SimuVirus.tools
         public void initialize(string path)
         {
             //readPeFile(path);
+            filePath = path;
             run(path);
         }
 
@@ -44,10 +49,34 @@ namespace SimuVirus.tools
             }
         }
 
+        public FileStream launchNewFile()
+        {
+            FileStream newFile = File.Create(Info.currentDirectory + "\\infected.exe");
+            return newFile;
+        }
+
+        public void close(FileStream file)
+        {
+            file.Close();
+        }
+
+        public void copyStreamFromSrc(FileStream dest)
+        {
+            stream = new FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            stream.CopyTo(dest);
+            stream.Close();
+        }
+
+        public void modifyStream(FileStream file, int addr, byte[] data)
+        {
+            file.Position = addr;
+            if (file.CanWrite)
+                file.Write(data, 0, data.Length);
+        }
+
         private void run(string filePath)
         {
-
-            using (FileStream stream = new FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            using (stream = new FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
                 BinaryReader reader = new BinaryReader(stream);
                 dosHeader = FromBinaryReader<api.IMAGE_DOS_HEADER>(reader);
@@ -74,7 +103,6 @@ namespace SimuVirus.tools
                 {
                     imageSectionHeaders[headerNo] = FromBinaryReader<api.IMAGE_SECTION_HEADER>(reader);
                 }
-
             }
         }
     }
