@@ -155,6 +155,7 @@ NTSTATUS WINAPI NewZwQuerySystemInformation(
 			if (pCur->Reserved2[1] != NULL)
 			{
 				//比较进程名字是否是我们的目的进程
+				//MessageBox(NULL, (PWSTR)pCur->Reserved2[1], (PWSTR)pCur->Reserved2[1], MB_OK);
 				if (!_tcsicmp((PWSTR)pCur->Reserved2[1], g_szProcName))
 				{
 					//如果是，判断是否位于链表尾部
@@ -164,6 +165,7 @@ NTSTATUS WINAPI NewZwQuerySystemInformation(
 						pPrev->NextEntryOffset = 0;
 					else if(pPrev != NULL)
 						pPrev->NextEntryOffset += pCur->NextEntryOffset;
+
 				}
 				else
 					//更新前一个节点

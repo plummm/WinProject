@@ -22,6 +22,7 @@ BOOL Hook(LPCSTR szDllName, PROC pfnOrg, PROC pfnNew)
 	DWORD dwOldProtect;
 	DWORD dwRVA;
 	PBYTE pAddr;
+	PIMAGE_OPTIONAL_HEADER64 optionalHeader;
 
 	//找到IAT位置
 	hMod = GetModuleHandle(NULL);
@@ -29,25 +30,43 @@ BOOL Hook(LPCSTR szDllName, PROC pfnOrg, PROC pfnNew)
 
 	pAddr += *((DWORD*)&pAddr[0x3C]); //NT头
 
+	optionalHeader = (PIMAGE_OPTIONAL_HEADER64)(pAddr + 4 + sizeof(IMAGE_FILE_HEADER));
+
 	dwRVA = *((DWORD*)&pAddr[0x80]);  //IAT的偏移量
+	//dwRVA = optionalHeader->DataDirectory[1].VirtualAddress;
 
 	pImportDesc = (PIMAGE_IMPORT_DESCRIPTOR)((DWORD)hMod + dwRVA);
 
+	TCHAR s[100];
+
+	_stprintf_s(s, _T("%X"), hMod);
+	OutputDebugString(L"Start finding");
+	OutputDebugString(s);
+	//MessageBox(NULL, s, L"Hello", MB_OK);
 	//遍历寻找Kernel32.dll
 	for (; pImportDesc->Name; pImportDesc++)
 	{
+		
 		szLibName = (LPCSTR)((DWORD)hMod + pImportDesc->Name);
-
+		//_stprintf_s(s, _T("%s"), szLibName);
+		//OutputDebugString(s);
+		//OutputDebugString(szLibName);
 		if (!_stricmp(szLibName, szDllName))
 		{
-
+			OutputDebugString(L"FOUND KERNEL32");
 			pThunk = (PIMAGE_THUNK_DATA)((DWORD)hMod + pImportDesc->FirstThunk);
 
 			//遍历寻找WriteFile
 			for (; pThunk->u1.Function; pThunk++)
 			{
+				_stprintf_s(s, _T("%X"), pfnOrg);
+				OutputDebugString(s);
+				_stprintf_s(s, _T("%X"), pThunk->u1.Function);
+				OutputDebugString(s);
 				if (pThunk->u1.Function == (DWORD)pfnOrg)
 				{
+					//MessageBox(NULL, L"FOUND WRITE FILE", L"Hello", MB_OK);
+					OutputDebugString(L"FOUND WRITEFILE");
 					VirtualProtect((LPVOID)&pThunk->u1.Function, 4, PAGE_EXECUTE_READWRITE, &dwOldProtect);
 					pThunk->u1.Function = (DWORD)pfnNew;
 					VirtualProtect((LPVOID)&pThunk->u1.Function, 4, dwOldProtect, &dwOldProtect);

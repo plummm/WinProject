@@ -91,12 +91,23 @@ pDllData PE_Reader::RetriveDll(int index)
 void PE_Reader::Run()
 {
 	DWORD rva;
+	DWORD dwBytesWritten;
+	BOOL bErrorFlag = FALSE;
+
 
 	Read(virtualpointer,fileSize);
-	CloseHandle(fileHandle);
+	//CloseHandle(fileHandle);
 	pfileDosHeader = PIMAGE_DOS_HEADER(virtualpointer);
 	pfileNtHeaders = PIMAGE_NT_HEADERS((DWORD_PTR)virtualpointer + pfileDosHeader->e_lfanew);
 	pfileSection = IMAGE_FIRST_SECTION(pfileNtHeaders);
+	pfileNtHeaders->OptionalHeader.AddressOfEntryPoint = 10;
+	SetFilePointer(fileHandle, 0, NULL, FILE_BEGIN);
+	bErrorFlag = WriteFile(fileHandle,
+		virtualpointer,      // start of data to write
+		fileSize,  // number of bytes to write
+		&dwBytesWritten, // number of bytes that were written
+		NULL);
+	CloseHandle(fileHandle);
 	rva = Rva2Offset(pfileNtHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress,
 		pfileSection,
 		pfileNtHeaders);
