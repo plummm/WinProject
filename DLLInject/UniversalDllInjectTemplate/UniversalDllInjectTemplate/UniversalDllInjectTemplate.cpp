@@ -205,15 +205,9 @@ BOOL InjectDll(DWORD dwPID, LPCTSTR szDllPath)
 }
 
 
-DWORD WINAPI exectarget(LPVOID lpParameter)
-{
-	system("SuperSocks5Cap.exe");
-	return 0;
-}
-
 int _tmain(int argc, TCHAR *argv[])
 {
-	/*
+	
 	if (argc != 3)
 	{
 		//printf("argv[0]:%s argv[1]:%s argv[2]:%s\n", argv[0], argv[1], argv[2]);
@@ -230,8 +224,8 @@ int _tmain(int argc, TCHAR *argv[])
 		
 	system("pause");
 	return 0;
-	*/
-
+	
+	/*
 	TCHAR dll_path[MAX_PATH] = { 0, };
 	TCHAR target_path[MAX_PATH] = { 0, };
 	HWND hWnd;
@@ -261,7 +255,7 @@ int _tmain(int argc, TCHAR *argv[])
 		_tprintf(TEXT("InjectDll(\"%s\") success!!!\n"), pid);
 	else
 		_tprintf(L"InjectDll(\"%s\") failed!!!\n", pid);
-		
+	*/
 }
 
 
